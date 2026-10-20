@@ -1,0 +1,38 @@
+:root {
+  /* Palette (from the Jero Jones pop system) */
+  --black: #0b0b0b;
+  --paper: #d4d4d4;
+  --pink: #ec8797;
+  --lavender: #a5aee4;
+  --indigo: #293484;
+  --navy: #293364;
+  --night: #281d60;
+  --cobalt: #4055bb;
+  --plum: #5c1d60;
+  --olive: #9a9c1c;
+  --rust: #9c381c;
+  --red: #b82a38;
+  --ochre: #9b5d1c;
+
+  /* Type: Helvetica Neue Condensed when installed locally, Arial Narrow otherwise */
+  --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-cond: 'JJ Cond', 'Helvetica Neue', 'Arial Narrow', sans-serif;
+
+  /* Layout */
+  --gutter: clamp(16px, 4vw, 56px);
+  --section-y: clamp(48px, 7vw, 112px);
+  --max: 1280px;
+  --max-wide: 1320px;
+}
+
+@font-face {
+  font-family: 'JJ Cond';
+  src: local('HelveticaNeue-CondensedBlack'), local('Helvetica Neue Condensed Black');
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: 'JJ Cond';
+  src: local('HelveticaNeue-CondensedBold'), local('Helvetica Neue Condensed Bold');
+  font-weight: 700;
+}

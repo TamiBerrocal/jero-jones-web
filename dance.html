@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dance, dance, dance — Jero Jones</title>
+<meta name="description" content="La discografía de Jero Jones: Hollywood está lejos de casa, Transferencia, Circuito y ¿De qué hablamos cuando hablamos de amor?">
+<meta name="theme-color" content="#0B0B0B">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="module" src="/src/js/dance.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+<filter id="jjg"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter>
+</svg>
+
+<div class="dance-page">
+<nav class="nav" aria-label="Principal">
+<a class="nav__logo" href="./" aria-label="Jero Jones, inicio"><img src="/assets/logo-nav.svg" alt="jero jones" width="150" height="31"></a>
+<div class="nav__links">
+<a class="navlink" href="./">Inicio</a>
+<a class="navlink" href="quien.html">¿Quién es Jero Jones?</a>
+<a class="navlink" href="dance.html" aria-current="page">Dance, dance, dance</a>
+</div>
+</nav>
+
+<header class="dance-hero">
+<h1 class="dance-hero__title cond">
+<span class="dance-hero__l1 torn"><span class="tear-top">Dance, dance,</span><span class="tear-bot" aria-hidden="true">Dance, dance,</span></span>
+<span class="dance-hero__l2">dance</span>
+</h1>
+<p class="dance-hero__hint">Pasá el cursor por una tapa para darla vuelta como un disco de verdad. Tocá un tema para escucharlo.</p>
+</header>
+
+<main id="contenido" class="releases">
+<ul class="releases__grid wrap wrap--wide" data-releases></ul>
+</main>
+
+<div class="player" role="region" aria-label="Reproductor">
+<div class="player__inner">
+<div class="player__now">
+<div class="player__thumb" data-player-thumb></div>
+<div class="player__text" aria-live="polite">
+<p class="player__track cond" data-player-track>Elegí un tema</p>
+<p class="player__release" data-player-release>Dale vuelta a una tapa y tocá play</p>
+</div>
+<span class="eq" aria-hidden="true" data-player-eq hidden><span></span><span></span><span></span></span>
+</div>
+<div class="player__controls">
+<button class="player__skip" type="button" aria-label="Tema anterior" data-player-prev>
+<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M18 5 L8 12 L18 19 Z M6 5 V19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"></path></svg>
+</button>
+<button class="player__play" type="button" aria-label="Reproducir" data-player-toggle>
+<svg data-icon-play aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><path d="M8 4 L20 12 L8 20 Z" fill="currentColor"></path></svg>
+<svg data-icon-pause aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" hidden><path d="M7 5 H10 V19 H7 Z M14 5 H17 V19 H14 Z" fill="currentColor"></path></svg>
+</button>
+<button class="player__skip" type="button" aria-label="Tema siguiente" data-player-next>
+<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M6 5 L16 12 L6 19 Z M18 5 V19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"></path></svg>
+</button>
+</div>
+<div class="player__progress">
+<span data-player-elapsed>0:00</span>
+<div class="player__bar"><div class="player__fill" data-player-fill></div></div>
+<span data-player-total>0:30</span>
+</div>
+<p class="player__note">Audio de muestra sintetizado: reemplazar por previews reales de cada tema.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

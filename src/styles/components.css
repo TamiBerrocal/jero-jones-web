@@ -1,0 +1,135 @@
+/* Navigation */
+.nav {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 32px;
+  padding: 16px var(--gutter);
+  background: var(--black);
+}
+
+.nav__logo {
+  display: block;
+}
+
+.nav__logo img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
+
+.nav__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 28px;
+}
+
+.navlink {
+  color: var(--paper);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px 4px;
+  border-bottom: 3px solid transparent;
+}
+
+.navlink:hover,
+.navlink[aria-current='page'] {
+  color: var(--pink);
+  border-bottom-color: var(--pink);
+}
+
+.navlink[aria-current='page'] {
+  color: var(--paper);
+}
+
+/* Buttons: flat color block with an offset hard shadow */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 0;
+  background: var(--btn-bg, var(--pink));
+  color: var(--btn-ink, var(--black));
+  box-shadow: 4px 4px 0 var(--btn-shadow, var(--paper));
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.btn:hover {
+  color: var(--btn-ink, var(--black));
+  transform: translate(-3px, -3px);
+}
+
+.btn--pink { --btn-bg: var(--pink); --btn-ink: var(--black); }
+.btn--black { --btn-bg: var(--black); --btn-ink: var(--paper); }
+.btn--indigo { --btn-bg: var(--indigo); --btn-ink: var(--paper); }
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Footer */
+.footer {
+  background: var(--black);
+  padding: 48px var(--gutter) 40px;
+  border-top: 3px solid var(--pink);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+}
+
+.footer__logo {
+  width: min(100%, 360px);
+  height: auto;
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.footer__links a {
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 0;
+}
+
+.footer__legal {
+  margin: 28px auto 0;
+  font-size: 13px;
+  color: var(--lavender);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
