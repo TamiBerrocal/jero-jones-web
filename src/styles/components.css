@@ -35,18 +35,40 @@
   font-size: 15px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 12px 4px;
-  border-bottom: 3px solid transparent;
+  padding: 12px 4px 14px;
 }
 
 .navlink:hover,
-.navlink[aria-current='page'] {
+.navlink:focus-visible {
   color: var(--pink);
-  border-bottom-color: var(--pink);
 }
 
-.navlink[aria-current='page'] {
-  color: var(--paper);
+/* Pencil underline: a rough pink stroke that draws in on hover and marks the current page */
+.pen {
+  position: relative;
+  text-decoration: none;
+}
+
+.pen::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 0;
+  bottom: 3px;
+  height: 6px;
+  pointer-events: none;
+  background: var(--pink);
+  filter: url(#jjpencil);
+  clip-path: polygon(0 20%, 2% 6%, 12% 0, 30% 8%, 50% 4%, 68% 16%, 84% 32%, 94% 44%, 100% 50%, 94% 58%, 84% 72%, 66% 88%, 48% 96%, 28% 92%, 10% 100%, 2% 94%, 0 80%);
+  transform-origin: left center;
+  transform: scaleX(0) rotate(-0.4deg);
+  transition: transform 0.32s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.pen:hover::after,
+.pen:focus-visible::after,
+.pen[aria-current='page']::after {
+  transform: scaleX(1) rotate(-0.4deg);
 }
 
 /* Buttons: flat color block with an offset hard shadow */
@@ -54,12 +76,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   min-height: 48px;
   padding: 0 24px;
   border: 0;
   background: var(--btn-bg, var(--pink));
   color: var(--btn-ink, var(--black));
-  box-shadow: 4px 4px 0 var(--btn-shadow, var(--paper));
+  box-shadow: var(--btn-offset, 4px) var(--btn-offset, 4px) 0 var(--btn-shadow, var(--paper));
   font-family: inherit;
   font-weight: 700;
   font-size: 15px;
@@ -75,9 +98,13 @@
   transform: translate(-3px, -3px);
 }
 
+.btn svg {
+  flex: none;
+}
+
 .btn--pink { --btn-bg: var(--pink); --btn-ink: var(--black); }
 .btn--black { --btn-bg: var(--black); --btn-ink: var(--paper); }
-.btn--indigo { --btn-bg: var(--indigo); --btn-ink: var(--paper); }
+.btn--indigo { --btn-bg: var(--indigo); --btn-ink: var(--paper); --btn-shadow: var(--black); }
 
 .btn-row {
   display: flex;
@@ -85,11 +112,152 @@
   gap: 12px;
 }
 
+/* Bracket link: corner brackets that close into a box on hover */
+.brk {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.brk::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(currentColor, currentColor) left top / 3px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 3px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) left top / 10px 3px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 10px 3px no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 10px 3px no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 10px 3px no-repeat;
+  transition: background-size 0.28s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.brk:hover,
+.brk:focus-visible {
+  color: inherit;
+}
+
+.brk:hover::before,
+.brk:focus-visible::before {
+  background-size: 3px 100%, 3px 100%, 50% 3px, 50% 3px, 50% 3px, 50% 3px;
+}
+
+/* Newsletter signup (pink band shared by Home and Quién) */
+.signup {
+  background: var(--pink);
+  color: var(--black);
+  padding: 0 var(--gutter);
+  overflow: hidden;
+}
+
+.signup__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 clamp(24px, 5vw, 80px);
+}
+
+.signup__sticker {
+  display: block;
+  flex: none;
+  width: auto;
+  max-width: 100%;
+}
+
+.signup__body {
+  flex: 1 1 380px;
+  min-width: 0;
+  align-self: center;
+  padding: clamp(32px, 4.5vw, 72px) 0;
+}
+
+.signup__title {
+  margin: 0 0 clamp(20px, 2.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: clamp(48px, 7vw, 112px);
+  line-height: 0.88;
+}
+
+.signup__title .fit-cap {
+  background: var(--black);
+  color: var(--paper);
+  padding: 0 0.18em 0.1em;
+}
+
+.signup__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  align-items: center;
+}
+
+.signup__field {
+  flex: 1 1 260px;
+  max-width: 460px;
+}
+
+.signup__field input {
+  width: 100%;
+  font: inherit;
+  font-weight: 700;
+  font-size: clamp(17px, 1.6vw, 21px);
+  padding: 14px 16px;
+  background: var(--white);
+  color: var(--black);
+  border: 3px solid var(--black);
+  border-radius: 0;
+}
+
+.signup .btn {
+  --btn-bg: var(--black);
+  --btn-ink: var(--paper);
+  --btn-shadow: var(--paper);
+  --btn-offset: 5px;
+}
+
+.signup :focus-visible {
+  outline-color: var(--indigo);
+}
+
+.signup__error {
+  flex-basis: 100%;
+  margin: 0;
+  font-weight: 700;
+}
+
+.signup__done {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1;
+}
+
+.signup__done span {
+  background: var(--black);
+  color: var(--pink);
+  padding: 4px 12px 0;
+}
+
 /* Footer */
 .footer {
   background: var(--black);
   padding: 48px var(--gutter) 40px;
-  border-top: 3px solid var(--pink);
 }
 
 .footer__inner {
@@ -112,24 +280,22 @@
 }
 
 .footer__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
   font-weight: 700;
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 10px 0;
+}
+
+.footer__links svg {
+  flex: none;
 }
 
 .footer__legal {
   margin: 28px auto 0;
   font-size: 13px;
   color: var(--lavender);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
 }

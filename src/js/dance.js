@@ -16,30 +16,24 @@ const ui = {
   track: document.querySelector('[data-player-track]'),
   release: document.querySelector('[data-player-release]'),
   eq: document.querySelector('[data-player-eq]'),
+  tip: document.querySelector('[data-player-tip]'),
   toggle: document.querySelector('[data-player-toggle]'),
   iconPlay: document.querySelector('[data-icon-play]'),
   iconPause: document.querySelector('[data-icon-pause]'),
   prev: document.querySelector('[data-player-prev]'),
   next: document.querySelector('[data-player-next]'),
   elapsed: document.querySelector('[data-player-elapsed]'),
+  total: document.querySelector('[data-player-total]'),
   fill: document.querySelector('[data-player-fill]'),
 };
 
 const escape = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-
-function coverMarkup(r) {
-  if (r.img) {
-    return `<img src="${r.img}" alt="Tapa de ${escape(r.title)}" loading="lazy">`;
-  }
-  return `
-    <div class="duo" style="--duo-light: ${r.duo.light}; --duo-dark: ${r.duo.dark}">
-      <img src="${r.duo.img}" alt="" style="object-position: ${r.duo.pos}" loading="lazy">
-      <div class="shade"></div>
-    </div>
-    <svg class="grain" aria-hidden="true"><rect width="100%" height="100%" filter="url(#jjg)"></rect></svg>
-    <p class="rec__cover-title cond" style="color: ${r.ink}">${escape(r.title)}</p>`;
-}
+const seconds = (mmss) => {
+  const [m, s] = mmss.split(':').map(Number);
+  return m * 60 + s;
+};
+const clockText = (n) => `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`;
 
 function releaseMarkup(r, ri) {
   const tracks = r.tracks
@@ -47,7 +41,7 @@ function releaseMarkup(r, ri) {
       (t, ti) => `
       <li><button type="button" class="trk" data-rel="${ri}" data-trk="${ti}">
         <span class="trk__n cond">${String(ti + 1).padStart(2, '0')}</span>
-        <span class="trk__name">${escape(t.name)}</span>
+        <span class="trk__name">[ ${escape(t.name)} ]</span>
         <span class="trk__dur">${escape(t.duration)}</span>
       </button></li>`,
     )
@@ -58,21 +52,20 @@ function releaseMarkup(r, ri) {
     <div class="rec" style="--label: ${r.label}">
       <div class="rec__disc" aria-hidden="true"></div>
       <div class="rec__card">
-        <div class="rec__face" style="background: ${r.bg}">${coverMarkup(r)}</div>
+        <div class="rec__face" style="background: ${r.bg}"><img src="${r.img}" alt="Tapa de ${escape(r.title)}" loading="lazy"></div>
         <div class="rec__face rec__back" style="background: ${r.backBg}; color: ${r.backInk}">
           <p class="rec__meta">${escape(r.kind)} · ${r.year}</p>
           <p class="rec__back-title cond">${escape(r.title)}</p>
           <ol class="tracks">${tracks}</ol>
-          <p class="rec__note">[Lista de temas provisoria]</p>
         </div>
       </div>
     </div>
     <div class="rel__foot">
       <div>
         <h2 class="rel__title cond">${escape(r.title)}</h2>
-        <p class="rel__meta" style="color: ${r.label}">${escape(r.kind)} · ${r.year}</p>
+        <p class="rel__meta">${escape(r.kind)} · ${r.year}</p>
       </div>
-      <button type="button" class="rel__toggle" data-toggle="${r.id}" aria-pressed="false">Ver temas</button>
+      <button type="button" class="brk" data-toggle="${r.id}" aria-pressed="false">Ver temas</button>
     </div>
   </li>`;
 }
@@ -92,25 +85,30 @@ grid.addEventListener('click', (event) => {
 });
 
 ui.toggle.addEventListener('click', () => {
-  if (state.rel === null) return play(releases.length - 1, 0);
-  if (state.playing) {
-    pause();
-  } else {
-    play(state.rel, state.trk, state.t);
-  }
+  if (state.rel === null) return play(0, 0);
+  if (!current().playable) return;
+  if (state.playing) pause();
+  else play(state.rel, state.trk, state.t);
 });
 ui.prev.addEventListener('click', () => go(-1));
 ui.next.addEventListener('click', () => go(1));
 
+const current = () => releases[state.rel].tracks[state.trk];
+
+// Selecting a track without a preview still shows it in the player, just not playing.
 function play(ri, ti, from = 0) {
-  Object.assign(state, { rel: ri, trk: ti, playing: true, t: from });
-  playSound(releases[ri], ti);
+  const playable = releases[ri].tracks[ti].playable;
+  Object.assign(state, { rel: ri, trk: ti, playing: playable, t: from });
+  stopSound();
   clearInterval(clock);
-  clock = setInterval(() => {
-    state.t += 1;
-    if (state.t >= PREVIEW_SECONDS) go(1);
-    else renderProgress();
-  }, 1000);
+  if (playable) {
+    playSound(releases[ri], ti);
+    clock = setInterval(() => {
+      state.t += 1;
+      if (state.t >= PREVIEW_SECONDS) go(1);
+      else renderProgress();
+    }, 1000);
+  }
   renderPlayer();
 }
 
@@ -147,27 +145,38 @@ function renderFlip() {
 }
 
 function renderProgress() {
-  ui.elapsed.textContent = `0:${String(state.t).padStart(2, '0')}`;
-  ui.fill.style.width = `${(state.t / PREVIEW_SECONDS) * 100}%`;
+  const total = seconds(current().duration);
+  ui.elapsed.textContent = clockText(state.t);
+  ui.fill.style.width = `${Math.min(100, (state.t / total) * 100)}%`;
 }
 
 function renderPlayer() {
   const r = releases[state.rel];
-  ui.track.textContent = r.tracks[state.trk].name;
+  const track = current();
+  ui.track.textContent = track.name;
   ui.release.textContent = `${r.title} · ${r.year}`;
   ui.thumb.style.background = r.bg;
-  ui.thumb.innerHTML = r.img ? `<img src="${r.img}" alt="">` : '';
+  ui.thumb.innerHTML = `<img src="${r.img}" alt="">`;
   ui.eq.hidden = !state.playing;
   ui.iconPlay.toggleAttribute('hidden', state.playing);
   ui.iconPause.toggleAttribute('hidden', !state.playing);
-  ui.toggle.setAttribute('aria-label', state.playing ? 'Pausar' : 'Reproducir');
+  ui.total.textContent = track.duration;
+
+  const available = track.playable;
+  ui.toggle.setAttribute('aria-disabled', String(!available));
+  ui.toggle.setAttribute(
+    'aria-label',
+    state.playing ? 'Pausar' : available ? 'Reproducir' : 'Reproducir: no disponible en este momento',
+  );
+  ui.tip.dataset.tip = available ? '' : 'No disponible en este momento';
 
   grid.querySelectorAll('.trk').forEach((button) => {
-    const on = Number(button.dataset.rel) === state.rel && Number(button.dataset.trk) === state.trk;
+    const rel = releases[button.dataset.rel];
+    const ti = Number(button.dataset.trk);
+    const on = Number(button.dataset.rel) === state.rel && ti === state.trk;
     button.classList.toggle('is-on', on);
-    const title = releases[button.dataset.rel].title;
-    const prefix = on && state.playing ? 'Sonando' : 'Reproducir';
-    button.setAttribute('aria-label', `${prefix}: tema ${Number(button.dataset.trk) + 1} de ${title}`);
+    const prefix = on && state.playing ? 'Sonando' : rel.tracks[ti].playable ? 'Reproducir' : 'Ver';
+    button.setAttribute('aria-label', `${prefix}: tema ${ti + 1} de ${rel.title}`);
   });
   renderProgress();
 }

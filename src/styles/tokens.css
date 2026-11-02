@@ -13,6 +13,9 @@
   --rust: #9c381c;
   --red: #b82a38;
   --ochre: #9b5d1c;
+  --deep: #26265f;
+  --white: #f2f2f2;
+  --red-dark: #951e26;
 
   /* Type: Helvetica Neue Condensed when installed locally, Arial Narrow otherwise */
   --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;

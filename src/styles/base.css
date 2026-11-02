@@ -13,7 +13,7 @@ body {
   background: var(--black);
   color: var(--paper);
   font-family: var(--font-body);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 img {
@@ -33,8 +33,9 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--pink);
+  outline: 3px solid var(--lavender);
   outline-offset: 3px;
+  border-radius: 0;
 }
 
 .visually-hidden {
@@ -74,6 +75,12 @@ a:hover {
   padding: var(--section-y) var(--gutter);
 }
 
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
 /* Condensed display type */
 .cond {
   font-family: var(--font-cond);
@@ -82,29 +89,56 @@ a:hover {
   text-transform: uppercase;
 }
 
-/* Torn headline: same word drawn twice, split along a jagged line */
-.torn {
+.kick {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Trim the box to the cap height so color blocks hug the letters */
+.fit-cap {
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
+}
+
+/* Torn headline: the word is drawn twice and split at half the cap height */
+.tear {
   position: relative;
+  display: inline-block;
 }
 
 .tear-top {
   display: block;
-  clip-path: polygon(0 0, 100% 0, 100% 47%, 91% 53%, 80% 45%, 68% 56%, 55% 46%, 42% 55%, 30% 45%, 18% 54%, 7% 46%, 0 52%);
+  white-space: nowrap;
+  clip-path: inset(-20% -10% calc(100% - 0.37em) -10%);
+  clip-path: inset(-20% -10% calc(100% - 0.5cap - 0.01em) -10%);
 }
 
 .tear-bot {
   position: absolute;
   left: 0;
   top: 0;
-  transform: translate(0.06em, 0.05em) rotate(1.4deg);
-  clip-path: polygon(0 52%, 7% 46%, 18% 54%, 30% 45%, 42% 55%, 55% 46%, 68% 56%, 80% 45%, 91% 53%, 100% 47%, 100% 100%, 0 100%);
+  white-space: nowrap;
+  clip-path: inset(0.45em -10% -40% -10%);
+  clip-path: inset(calc(0.5cap + 0.09em) -10% -40% -10%);
 }
 
-/* Colored block behind a line of display type */
+/* Display line set in its own color block */
 .block {
-  display: inline-block;
-  padding: 6px 18px 0;
+  display: block;
+  align-self: flex-start;
   line-height: 0.88;
+  padding: 0.02em 0.18em 0.07em;
+}
+
+/* Highlighted phrase inside body copy */
+.mark {
+  padding: 2px 8px;
+  font-weight: 700;
+  color: var(--black);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* Duotone: grayscale photo multiplied over a light color, lightened by a dark one */
@@ -115,7 +149,7 @@ a:hover {
   background: var(--duo-light, var(--pink));
 }
 
-.duo > img:not(.sticker) {
+.duo > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -142,7 +176,11 @@ a:hover {
   pointer-events: none;
 }
 
-.sticker {
-  filter: drop-shadow(6px 0 0 var(--pink)) drop-shadow(-6px 0 0 var(--pink)) drop-shadow(0 6px 0 var(--pink))
-    drop-shadow(0 -6px 0 var(--pink));
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

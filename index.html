@@ -4,141 +4,133 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jero Jones — Inicio</title>
-<meta name="description" content="Jero Jones, artista de Quilmes. Nuevo EP «¿De qué hablamos cuando hablamos de amor?», fechas, videos y novedades.">
+<meta name="description" content="Jero Jones, artista de Quilmes. Nuevo single «Tipos y minas», gira «Forma de onda», fechas, videos y novedades.">
 <meta name="theme-color" content="#0B0B0B">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="/assets/hero/01.webp">
 <script type="module" src="/src/js/home.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
-<svg width="0" height="0" style="position: absolute" aria-hidden="true">
-<filter id="jjg"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter>
+<svg class="svg-defs" aria-hidden="true">
+<filter id="jjpencil" x="-3%" y="-400%" width="106%" height="900%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.3 0.12" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="9" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.6 0 0 0 2" result="ga"/><feComposite in="d" in2="ga" operator="in"/></filter>
+<filter id="jjg"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+<filter id="jjdirty" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1.3 0 0 0 -0.13 0 1.3 0 0 -0.13 0 0 1.3 0 -0.13 0 0 0 1 0" result="c"/><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="1" seed="3" result="n"/><feDisplacementMap in="c" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G" result="d"/><feColorMatrix in="d" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="r"/><feOffset in="r" dx="4" dy="0" result="ro"/><feColorMatrix in="d" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="g"/><feColorMatrix in="d" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="b"/><feOffset in="b" dx="-4" dy="0" result="bo"/><feBlend in="ro" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="bo" mode="screen"/></filter>
+<filter id="jjtour" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.862 0 0 0 0.140 0.024 0 0 0 0.149 -0.230 0 0 0 0.375 0 0 0 1 0"/></filter>
 </svg>
 
 <nav class="nav" aria-label="Principal">
 <a class="nav__logo" href="./" aria-label="Jero Jones, inicio"><img src="/assets/logo-nav.svg" alt="jero jones" width="150" height="31"></a>
 <div class="nav__links">
-<a class="navlink" href="./" aria-current="page">Inicio</a>
-<a class="navlink" href="quien.html">¿Quién es Jero Jones?</a>
-<a class="navlink" href="dance.html">Dance, dance, dance</a>
+<a class="navlink pen" href="./" aria-current="page">Inicio</a>
+<a class="navlink pen" href="quien.html">¿Quién es Jero Jones?</a>
+<a class="navlink pen" href="dance.html">Dance, dance, dance</a>
 <a class="btn btn--pink" href="dance.html">Escuchá</a>
 </div>
 </nav>
 
 <main id="contenido">
-<header class="hero duo">
-<img src="/assets/hero-crowd.jpg" alt="">
-<div class="shade"></div>
-<svg class="grain" aria-hidden="true"><rect width="100%" height="100%" filter="url(#jjg)"></rect></svg>
-<div class="hero__rule"></div>
-<div class="hero__rule hero__rule--short"></div>
-
-<h1 class="hero__title cond">Jero<br>Jones</h1>
-
-<img class="hero__sticker sticker" src="/assets/sticker-silencio.png" alt="Jero Jones con anteojos negros haciendo silencio con el dedo">
-
-<div class="hero__copy">
-<div class="hero__q1">
-<div class="torn cond"><span class="tear-top">¿Qué</span><span class="tear-bot" aria-hidden="true">¿Qué</span></div>
-</div>
-<span class="hero__q2 block cond">escuchás?</span>
-<div class="btn-row">
-<a class="btn btn--pink" href="#nuevo">Escuchá el nuevo EP</a>
-<a class="btn btn--black" href="#fechas">Ver fechas</a>
+<header class="hero is-static" data-hero aria-label="Jero Jones">
+<div class="hero__stage">
+<div class="hero__frames" data-frames><img src="/assets/hero/01.webp" alt="" fetchpriority="high"></div>
+<div class="hero__grain" aria-hidden="true"><svg><rect width="100%" height="100%" filter="url(#jjg)"/></svg></div>
+<div class="hero__vignette" aria-hidden="true"></div>
+<div class="hero__fade hero__fade--top" aria-hidden="true"></div>
+<div class="hero__fade hero__fade--bottom" aria-hidden="true"></div>
+<h1 class="hero__title cond">
+<span class="ghost-line" data-line><span class="ghost" aria-hidden="true">Jero</span><span class="ghost-line__text">Jero</span></span>
+<span class="ghost-line" data-line><span class="ghost" aria-hidden="true">Jones</span><span class="ghost-line__text">Jones</span></span>
+</h1>
+<div class="hero__meter">
+<span class="kick hero__counter" data-counter>0%</span>
+<div class="meter" aria-hidden="true"><div class="meter__fill" data-meter></div></div>
+<span class="kick hero__hint" data-hint>Scrolleá ↓</span>
 </div>
 </div>
 </header>
 
+<section id="nuevo" class="release">
 <div class="band" aria-hidden="true">
 <div class="band__strip cond">
-<div class="marquee"><span>Nuevo EP · ¿De qué hablamos cuando hablamos de amor? · Dance, dance, dance · Nuevo EP · ¿De qué hablamos cuando hablamos de amor? · Dance, dance, dance ·&nbsp;</span><span>Nuevo EP · ¿De qué hablamos cuando hablamos de amor? · Dance, dance, dance · Nuevo EP · ¿De qué hablamos cuando hablamos de amor? · Dance, dance, dance ·&nbsp;</span></div>
+<div class="marquee"><span>Nuevo single · Tipos y minas ·&nbsp;Nuevo single · Tipos y minas ·&nbsp;Nuevo single · Tipos y minas ·&nbsp;Nuevo single · Tipos y minas ·&nbsp;</span><span>Nuevo single · Tipos y minas ·&nbsp;Nuevo single · Tipos y minas ·&nbsp;Nuevo single · Tipos y minas ·&nbsp;Nuevo single · Tipos y minas ·&nbsp;</span></div>
 </div>
 </div>
-
-<section id="nuevo" class="release section">
+<div class="section">
 <div class="wrap release__grid">
 <div class="release__art">
-<div class="release__cover duo">
-<img src="/assets/cover-wink.jpg" alt="Tapa provisoria: cara de Jero guiñando en duotono rosa e índigo">
-<div class="shade"></div>
-<p class="release__cover-title cond" aria-hidden="true">¿De qué hablamos cuando hablamos de amor?</p>
-</div>
-<p class="release__note">[Tapa provisoria — reemplazar por arte final]</p>
+<img src="/assets/covers/tipos-y-minas.jpg" alt="Tapa de Tipos y minas: Jero Jones y Marttein sostienen un casete contra una camisa blanca" width="640" height="640">
 </div>
 <div class="release__body">
-<p class="release__kicker"><span>Nuevo EP · 2026</span></p>
-<h2 class="release__title cond">¿De qué hablamos cuando hablamos de amor?</h2>
-<p class="release__lede">[Bajada del lanzamiento: 1–2 frases sobre el EP.]</p>
+<p class="release__kicker"><span>Nuevo single · 2026</span></p>
+<h2 class="release__title cond"><span>Tipos y</span><span>minas</span></h2>
 <div class="btn-row">
-<a class="btn btn--indigo" href="#">Spotify</a>
-<a class="btn btn--indigo" href="#">Apple Music</a>
-<a class="btn btn--indigo" href="#">YouTube Music</a>
+<a class="btn btn--indigo" href="https://open.spotify.com/album/1ChzP6zh0dtIzHlBNQF1Gx" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.5em" height="1.5em"><circle cx="12" cy="12" r="12" fill="currentColor"/><g fill="none" stroke="#293484" stroke-linecap="round"><path d="M5.2 8.6c4.4-1.3 9.4-.9 13.6 1.4" stroke-width="2.2"/><path d="M6 12.4c3.7-1 7.7-.7 11.1 1.2" stroke-width="1.9"/><path d="M6.9 15.9c3-.8 6-.5 8.6.9" stroke-width="1.6"/></g></svg>Spotify</a>
+<a class="btn btn--indigo" href="https://music.apple.com/es/song/tipos-y-minas-feat-marttein/6812893528" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.5em" height="1.5em"><rect width="24" height="24" rx="6" fill="currentColor"/><path d="M16.6 4.8 9.8 6.3a.8.8 0 0 0-.6.8v8.4a2.3 2.3 0 1 0 1.5 2.1V9.6l4.5-1v5.6a2.3 2.3 0 1 0 1.5 2.1V5.6a.8.8 0 0 0-1.1-.8z" fill="#293484"/></svg>Apple Music</a>
+<a class="btn btn--indigo" href="https://music.youtube.com/playlist?list=OLAK5uy_k9qEw_vfYOQcMqzQ8eZchpzYtOYjYZfg8" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.5em" height="1.5em"><circle cx="12" cy="12" r="10.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9.6 7.6v8.8L17 12z" fill="currentColor"/></svg>YouTube Music</a>
 </div>
-<p class="release__more"><a href="dance.html">Ver toda la discografía →</a></p>
 </div>
+</div>
+</div>
+</section>
+
+<section id="gira" class="tour is-static" data-tour aria-label="Gira Forma de onda">
+<div class="tour__stage">
+<div class="tour__copy">
+<div class="tour__head">
+<h2 class="tour__title cond">
+<span class="ghost-line"><span class="ghost" aria-hidden="true">Forma</span><span class="ghost-line__text">Forma</span></span>
+<span class="ghost-line"><span class="ghost" aria-hidden="true">De</span><span class="ghost-line__text">De</span></span>
+<span class="ghost-line"><span class="ghost" aria-hidden="true">Onda</span><span class="ghost-line__text">Onda</span></span>
+</h2>
+<div class="flaps cond" role="img" aria-label="CABA, La Plata, Rosario, Córdoba y Quilmes" data-flaps></div>
+</div>
+<div class="tour__meter">
+<div class="meter" aria-hidden="true"><div class="meter__fill" data-tour-meter></div></div>
+<span class="kick" data-tour-hint>Scrolleá ↓</span>
+</div>
+</div>
+<div class="tour__frame" aria-hidden="true"><div class="tour__frames" data-tour-frames><img src="/assets/tour/01.webp" alt="" loading="lazy"></div></div>
 </div>
 </section>
 
 <section id="fechas" class="dates section">
 <div class="wrap">
 <div class="dates__head">
-<h2 class="dates__q1 torn cond"><span class="tear-top">¿Dónde</span><span class="tear-bot" aria-hidden="true">¿Dónde</span><span class="visually-hidden"> nos vemos?</span></h2>
+<h2 class="dates__q1 cond">¿<span class="tear"><span class="tear-top fit-cap">Dónde</span><span class="tear-bot fit-cap" aria-hidden="true">Dónde</span></span><span class="visually-hidden"> nos vemos?</span></h2>
 <span class="dates__q2 block cond" aria-hidden="true">nos vemos?</span>
 </div>
 <ul class="dates__list">
-<li class="dates__item"><span class="dates__date cond">[DD.MM]</span><span class="dates__city">[Ciudad]</span><span class="dates__venue">[Lugar]</span><a class="btn btn--black" href="#">Entradas</a></li>
-<li class="dates__item"><span class="dates__date cond">[DD.MM]</span><span class="dates__city">[Ciudad]</span><span class="dates__venue">[Lugar]</span><a class="btn btn--black" href="#">Entradas</a></li>
-<li class="dates__item"><span class="dates__date cond">[DD.MM]</span><span class="dates__city">[Ciudad]</span><span class="dates__venue">[Lugar]</span><a class="btn btn--black" href="#">Entradas</a></li>
+<li class="dates__item"><span class="dates__date cond">01 Nov</span><span class="dates__city">CABA</span><span class="dates__venue">The Roxy</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
+<li class="dates__item"><span class="dates__date cond">13 Nov</span><span class="dates__city">La Plata</span><span class="dates__venue">Guajira</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
+<li class="dates__item"><span class="dates__date cond">21 Nov</span><span class="dates__city">Rosario</span><span class="dates__venue">Capitán</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
+<li class="dates__item"><span class="dates__date cond">28 Nov</span><span class="dates__city">Córdoba</span><span class="dates__venue">Un Mundo Feliz</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
+<li class="dates__item"><span class="dates__date cond">11 Dic</span><span class="dates__city">CABA</span><span class="dates__venue">CC Konex</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
+<li class="dates__item"><span class="dates__date cond">19 Dic</span><span class="dates__city">Quilmes</span><span class="dates__venue">Club Tucumán</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
 </ul>
-<p class="dates__note">[Fechas a confirmar]</p>
 </div>
 </section>
 
 <section class="watch section">
 <div class="wrap">
-<h2 class="watch__title cond">Mirá</h2>
-<div class="watch__frame duo">
-<img src="/assets/video-still.jpg" alt="Fotograma del video: collage de Jero haciendo silencio">
-<div class="shade"></div>
-<button class="watch__play" type="button" aria-label="Reproducir video">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="40" height="40"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"></path></svg>
-</button>
-</div>
-<p class="watch__caption">[Título del video] · [Año]</p>
-</div>
-</section>
-
-<section class="pieces section">
-<div class="wrap">
-<div class="pieces__head">
-<h2 class="pieces__title cond">¿Qué <span>ves?</span></h2>
-<p class="pieces__note">Piezas del universo «Redes». [Provisorias: reemplazar por la exportación en alta del .ai.]</p>
-</div>
-<div class="pieces__grid">
-<a class="tile" href="#"><img src="/assets/redes-1.jpg" alt="Jero guiñando bajo un signo de pregunta, público en duotono rojo y azul" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-2.jpg" alt="Multitud en una avenida, blanco y negro con grano" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-3.jpg" alt="¿Qué ves? en tipografía rasgada sobre oliva y violeta" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-4.jpg" alt="Zapatos de taco sobre rojo con filetes azules" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-5.jpg" alt="Jero Jones en cobalto sobre lavanda con figura recortada en rosa" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-6.jpg" alt="Anteojos azules sobre foto de fiesta en blanco y negro" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-7.jpg" alt="¿Qué hacés? en bloques violeta y naranja" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-8.jpg" alt="Vinilo y bandeja con contorno dibujado a mano" loading="lazy"></a>
-<a class="tile" href="#"><img src="/assets/redes-9.jpg" alt="Cara riendo sobre violeta con mancha naranja y marco blanco" loading="lazy"></a>
+<h2 class="watch__title cond fit-cap">Mirá</h2>
+<div class="watch__frame" data-video="w0sPaSkhMdg" data-video-title="Jero Jones en YouTube">
+<a class="watch__poster" href="https://youtu.be/w0sPaSkhMdg" target="_blank" rel="noopener" aria-label="Reproducir el video" data-video-play>
+<img src="/assets/video-still.jpg" alt="Fotograma del video: Jero con anteojos de sol y moño" loading="lazy">
+<span class="watch__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg></span>
+</a>
 </div>
 </div>
 </section>
 
-<section class="signup">
+<section class="signup" aria-labelledby="signup-title">
 <div class="wrap signup__grid">
-<h2 class="signup__title cond">¿Te aviso cuando pase algo?</h2>
+<img class="signup__sticker signup__sticker--home" src="/assets/stickers/home-signup.png" alt="" aria-hidden="true" loading="lazy">
 <div class="signup__body" aria-live="polite">
+<h2 id="signup-title" class="signup__title cond"><span>¿Te aviso</span><span class="fit-cap">cuando pase algo?</span></h2>
 <form class="signup__form" data-signup novalidate>
-<label for="jj-mail">Tu email</label>
-<div class="signup__row">
-<input id="jj-mail" name="email" type="email" required autocomplete="email" placeholder="nombre@mail.com">
-<button class="btn btn--black" type="submit">Sumarme</button>
-</div>
-<p class="signup__error" data-signup-error hidden>Revisá el email: tiene que ser algo como nombre@mail.com.</p>
+<label class="signup__field"><span class="visually-hidden">Tu mail</span><input name="email" type="email" required autocomplete="email" placeholder="tu@mail.com"></label>
+<button class="btn" type="submit">Avisame</button>
+<p class="signup__error" data-signup-error hidden>Revisá el mail: tiene que ser algo como tu@mail.com.</p>
 </form>
 <p class="signup__done cond" data-signup-done hidden><span>¡Listo! Te escribo.</span></p>
 </div>
@@ -147,16 +139,15 @@
 </main>
 
 <footer class="footer">
-<div class="wrap footer__inner">
+<div class="wrap--wide footer__inner" style="margin: 0 auto">
 <img class="footer__logo" src="/assets/logo-footer.svg" alt="jero jones" width="360" height="74" loading="lazy">
 <div class="footer__links">
-<a href="#">Instagram</a>
-<a href="#">Spotify</a>
-<a href="#">YouTube</a>
-<a href="#">TikTok</a>
+<a class="pen" href="https://www.instagram.com/jerojonespfg2/" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.3em" height="1.3em"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg>Instagram</a>
+<a class="pen" href="https://open.spotify.com/artist/4Tk06wQxbCfPYcxqxGE8yJ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.3em" height="1.3em"><circle cx="12" cy="12" r="12" fill="currentColor"/><g fill="none" stroke="#0B0B0B" stroke-linecap="round"><path d="M5.2 8.6c4.4-1.3 9.4-.9 13.6 1.4" stroke-width="2.2"/><path d="M6 12.4c3.7-1 7.7-.7 11.1 1.2" stroke-width="1.9"/><path d="M6.9 15.9c3-.8 6-.5 8.6.9" stroke-width="1.6"/></g></svg>Spotify</a>
+<a class="pen" href="https://youtube.com/@jerojones" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 28 20" width="1.6em" height="1.15em"><rect width="28" height="20" rx="5.5" fill="currentColor"/><path d="M11 5.8v8.4L18.6 10z" fill="#0B0B0B"/></svg>YouTube</a>
 </div>
 </div>
-<p class="wrap footer__legal">© 2026 Jero Jones · Quilmes</p>
+<p class="wrap--wide footer__legal">© 2026 Berrocal · Galvagni · Serber. Diseño Gráfico Digital. ORT Argentina.</p>
 </footer>
 </body>
 </html>
