@@ -557,41 +557,6 @@
   overflow: hidden;
 }
 
-.watch__poster {
-  position: absolute;
-  inset: 0;
-  display: block;
-}
-
-.watch__poster img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 22%;
-  display: block;
-}
-
-.watch__play {
-  position: absolute;
-  right: clamp(16px, 3vw, 40px);
-  bottom: clamp(16px, 3vw, 40px);
-  width: clamp(64px, 7vw, 96px);
-  height: clamp(64px, 7vw, 96px);
-  border-radius: 50%;
-  background: var(--pink);
-  color: var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 6px 6px 0 var(--black);
-  transition: transform 0.15s;
-}
-
-.watch__poster:hover .watch__play,
-.watch__poster:focus-visible .watch__play {
-  transform: translate(-3px, -3px);
-}
-
 .watch__frame iframe {
   position: absolute;
   inset: 0;

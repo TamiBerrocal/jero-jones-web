@@ -196,23 +196,6 @@ function initTour() {
   return render;
 }
 
-/* "Mirá": a poster that turns into the YouTube player on click (keeps YouTube off the page until asked) */
-function initVideo() {
-  const frame = document.querySelector('[data-video]');
-  const poster = frame.querySelector('[data-video-play]');
-  poster.addEventListener('click', (event) => {
-    event.preventDefault();
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube-nocookie.com/embed/${frame.dataset.video}?autoplay=1&rel=0&playsinline=1`;
-    iframe.title = frame.dataset.videoTitle;
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-    iframe.allowFullscreen = true;
-    poster.replaceWith(iframe);
-    iframe.focus();
-  });
-}
-
 const renders = [initHero(), initTour()];
 let queued = false;
 const update = () => {
@@ -229,5 +212,4 @@ window.addEventListener('scroll', schedule, { passive: true });
 window.addEventListener('resize', schedule);
 update();
 
-initVideo();
 initSignup();
