@@ -27,40 +27,13 @@
   min-height: 480px;
   overflow: hidden;
   background: var(--black);
-  container-type: size;
 }
 
-/* The frames are 4:3. On anything wider than that the frame is shown whole, centred, and the sides are
-   filled with a blurred copy of the same frame instead of cropping half the photo away. */
-.hero__backdrop {
-  position: absolute;
-  inset: -40px;
-  display: none;
-  width: calc(100% + 80px);
-  height: calc(100% + 80px);
-  object-fit: cover;
-  filter: blur(36px) brightness(0.4) saturate(0.85);
-}
-
+/* The frames fill the whole stage and get cropped to fit; the title and the bar sit on top, anchored to the stage */
 .hero__frames {
   position: absolute;
-  top: -8px;
-  left: 50%;
-  width: min(calc(100cqw + 16px), calc(133.333cqh + 16px));
-  height: calc(100cqh + 16px);
-  transform: translateX(-50%);
+  inset: -8px;
   filter: url(#jjdirty) saturate(0.85);
-}
-
-@container (min-aspect-ratio: 4 / 3) {
-  .hero__backdrop {
-    display: block;
-  }
-
-  .hero__frames {
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  }
 }
 
 .hero__frames img {
@@ -700,21 +673,21 @@
   color: var(--olive);
 }
 
-/* Watch: the video is capped so the title and the whole player fit in one screen */
+/* Watch: the video leads; the small title is a label on top, and the player is capped to fit one screen */
 .watch {
   background: var(--red);
 }
 
 .watch .wrap {
-  max-width: min(var(--max), max(360px, calc((100svh - 2 * var(--section-y) - 0.98 * clamp(48px, 7vw, 112px) - clamp(28px, 4vw, 56px)) * 16 / 9)));
+  max-width: min(var(--max), max(360px, calc((100svh - 2 * var(--section-y) - 0.98 * clamp(30px, 3.4vw, 56px) - clamp(14px, 1.6vw, 24px)) * 16 / 9)));
 }
 
 .watch__title {
   display: inline-block;
-  margin: 0 0 clamp(28px, 4vw, 56px);
+  margin: 0 0 clamp(14px, 1.6vw, 24px);
   background: var(--night);
   color: var(--paper);
-  font-size: clamp(48px, 7vw, 112px);
+  font-size: clamp(30px, 3.4vw, 56px);
   line-height: 0.88;
   padding: 0 0.18em 0.1em;
 }

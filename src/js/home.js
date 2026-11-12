@@ -50,7 +50,6 @@ function initHero() {
   const hero = document.querySelector('[data-hero]');
   const stage = hero.querySelector('.hero__stage');
   const show = frameStack(hero.querySelector('[data-frames]'), 'hero', HERO_FRAMES);
-  const backdrop = hero.querySelector('[data-backdrop]');
   const lines = hero.querySelectorAll('[data-line]');
   const bar = hero.querySelector('[data-bar]');
   const counter = hero.querySelector('[data-counter]');
@@ -64,9 +63,7 @@ function initHero() {
     const p = pinProgress(hero, stage);
     const frame = Math.round(clamp01(p / SCRUB) * (HERO_FRAMES - 1));
     const t = Math.round(clamp01((p - SCRUB) / (1 - SCRUB)) * 50) / 50;
-    const shown = show(frame);
-    // The blurred side fill only exists on screens wider than 4:3; skip it when it's hidden.
-    if (shown && shown.complete && shown.currentSrc && backdrop.offsetParent !== null) backdrop.src = shown.currentSrc;
+    show(frame);
     lines[0].classList.toggle('is-on', t >= 0.08);
     lines[1].classList.toggle('is-on', t >= 0.28);
     const sweep = clamp01((t - 0.45) / 0.5);
