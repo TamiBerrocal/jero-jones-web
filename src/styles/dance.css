@@ -451,3 +451,68 @@
   width: 0;
   background: var(--pink);
 }
+
+/* Phones: one compact row (thumb, title, controls); the progress bar runs along the top edge */
+@media (max-width: 600px) {
+  .player {
+    padding: 10px var(--gutter);
+  }
+
+  .player__inner {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .player__now {
+    flex: 1 1 auto;
+    gap: 10px;
+  }
+
+  .player__thumb {
+    flex-basis: 44px;
+    height: 44px;
+  }
+
+  .player__track {
+    font-size: 19px;
+  }
+
+  .player__release {
+    font-size: 12px;
+  }
+
+  .player__controls {
+    gap: 0;
+    margin-right: -6px;
+  }
+
+  .player__skip {
+    width: 36px;
+    height: 44px;
+  }
+
+  .player__play {
+    width: 48px;
+    height: 48px;
+  }
+
+  .player__progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -4px;
+    height: 4px;
+  }
+
+  .player__progress > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .player__bar {
+    height: 4px;
+  }
+}

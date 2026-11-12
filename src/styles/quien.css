@@ -180,20 +180,36 @@
   --btn-offset: 5px;
 }
 
-/* Signup: here the sticker sits at the bottom edge */
-.signup--quien {
-  padding-top: clamp(32px, 4.5vw, 72px);
-}
-
-.signup--quien .signup__grid {
-  align-items: flex-end;
-}
-
+/* Signup: here the sticker stands on the bottom edge and the black band grows to meet it */
 .signup__sticker--quien {
-  height: clamp(200px, 26vw, 400px);
+  --stk-ratio: 1.2308;
+  align-self: flex-end;
 }
 
-.signup--quien .signup__body {
-  align-self: auto;
-  padding-top: 0;
+.signup--quien .signup__head {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup--quien .signup__title {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+
+/* When the polaroid drops under the title (the row wraps just below ~966px), let it hang into the bio
+   less and start the text below it so "Soy de Quilmes" isn't covered. */
+@media (max-width: 966px) {
+  :root {
+    --overlap: clamp(96px, 24vw, 200px);
+  }
+
+  .bio-hero__photo {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bio {
+    padding-top: calc(var(--overlap) - clamp(40px, 6vw, 96px) + 32px);
+  }
 }

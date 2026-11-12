@@ -17,12 +17,13 @@
 
 <nav class="nav" aria-label="Principal">
 <a class="nav__logo" href="./" aria-label="Jero Jones, inicio"><img src="/assets/logo-nav.svg" alt="jero jones" width="150" height="31"></a>
-<div class="nav__links">
+<div class="nav__links" id="nav-menu">
 <a class="navlink pen" href="./">Inicio</a>
 <a class="navlink pen" href="quien.html" aria-current="page">¿Quién es Jero Jones?</a>
 <a class="navlink pen" href="dance.html">Dance, dance, dance</a>
-<a class="btn btn--pink" href="dance.html">Escuchá</a>
 </div>
+<a class="btn btn--pink nav__cta" href="dance.html">Escuchá</a>
+<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" hidden data-nav-toggle><span class="visually-hidden" data-nav-label>Abrir menú</span><span class="nav__burger" aria-hidden="true"></span></button>
 </nav>
 
 <main id="contenido">
@@ -74,8 +75,10 @@
 <section class="signup signup--quien" aria-labelledby="signup-title">
 <div class="wrap--wide signup__grid" style="margin: 0 auto">
 <img class="signup__sticker signup__sticker--quien" src="/assets/stickers/quien-signup.webp" alt="" aria-hidden="true" loading="lazy">
+<div class="signup__head">
+<h2 id="signup-title" class="signup__title cond"><span>¿Te aviso</span><span>cuando pase algo?</span></h2>
+</div>
 <div class="signup__body" aria-live="polite">
-<h2 id="signup-title" class="signup__title cond"><span>¿Te aviso</span><span class="fit-cap">cuando pase algo?</span></h2>
 <form class="signup__form" data-signup novalidate>
 <label class="signup__field"><span class="visually-hidden">Tu mail</span><input name="email" type="email" required autocomplete="email" placeholder="tu@mail.com"></label>
 <button class="btn" type="submit">Avisame</button>

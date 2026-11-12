@@ -102,7 +102,7 @@ a:hover {
   text-box-edge: cap alphabetic;
 }
 
-/* Torn headline: the word is drawn twice and split at half the cap height */
+/* Torn headline: the word is drawn twice and split along a slanted cut near half the cap height */
 .tear {
   position: relative;
   display: inline-block;
@@ -111,8 +111,8 @@ a:hover {
 .tear-top {
   display: block;
   white-space: nowrap;
-  clip-path: inset(-20% -10% calc(100% - 0.37em) -10%);
-  clip-path: inset(-20% -10% calc(100% - 0.5cap - 0.01em) -10%);
+  clip-path: polygon(-10% -20%, 110% -20%, 110% 0.168em, -10% 0.352em);
+  clip-path: polygon(-10% -20%, 110% -20%, 110% calc(0.42cap - 0.132em), -10% calc(0.42cap + 0.052em));
 }
 
 .tear-bot {
@@ -120,8 +120,8 @@ a:hover {
   left: 0;
   top: 0;
   white-space: nowrap;
-  clip-path: inset(0.45em -10% -40% -10%);
-  clip-path: inset(calc(0.5cap + 0.09em) -10% -40% -10%);
+  clip-path: polygon(-10% 0.432em, 110% 0.248em, 110% 140%, -10% 140%);
+  clip-path: polygon(-10% calc(0.42cap + 0.132em), 110% calc(0.42cap - 0.052em), 110% 140%, -10% 140%);
 }
 
 /* Display line set in its own color block */

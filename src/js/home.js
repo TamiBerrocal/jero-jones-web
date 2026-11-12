@@ -2,6 +2,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/home.css';
+import { initNav } from './nav.js';
 import { initSignup } from './signup.js';
 
 const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
@@ -30,10 +31,11 @@ function frameStack(container, folder, count) {
   let current = 0;
   imgs[0].classList.add('is-on');
   return (index) => {
-    if (index === current) return;
+    if (index === current) return false;
     imgs[current].classList.remove('is-on');
     imgs[index].classList.add('is-on');
     current = index;
+    return imgs[index];
   };
 }
 
@@ -43,18 +45,18 @@ function pinProgress(section, stage) {
   return travel > 0 ? clamp01(-section.getBoundingClientRect().top / travel) : 0;
 }
 
-/* Hero: the first 3000/3900 of the scroll scrubs the frames, the rest reveals the title line by line */
+/* Hero: the first 3000/4500 of the scroll scrubs the frames, the rest reveals the title and sweeps in the bar */
 function initHero() {
   const hero = document.querySelector('[data-hero]');
   const stage = hero.querySelector('.hero__stage');
   const show = frameStack(hero.querySelector('[data-frames]'), 'hero', HERO_FRAMES);
+  const backdrop = hero.querySelector('[data-backdrop]');
   const lines = hero.querySelectorAll('[data-line]');
+  const bar = hero.querySelector('[data-bar]');
   const counter = hero.querySelector('[data-counter]');
   const meter = hero.querySelector('[data-meter]');
   const hint = hero.querySelector('[data-hint]');
-  const SCRUB = 3000 / 3900;
-  const OFFSETS = [0, 18, 12, 6];
-  const stageOf = (t, a, b, c) => (t >= c ? 3 : t >= b ? 2 : t >= a ? 1 : 0);
+  const SCRUB = 3000 / 4500;
 
   hero.classList.remove('is-static');
 
@@ -62,12 +64,14 @@ function initHero() {
     const p = pinProgress(hero, stage);
     const frame = Math.round(clamp01(p / SCRUB) * (HERO_FRAMES - 1));
     const t = Math.round(clamp01((p - SCRUB) / (1 - SCRUB)) * 50) / 50;
-    show(frame);
-    [stageOf(t, 0.1, 0.26, 0.42), stageOf(t, 0.42, 0.58, 0.74)].forEach((s, i) => {
-      lines[i].classList.toggle('is-on', s > 0);
-      lines[i].style.setProperty('--gx', `${OFFSETS[s]}px`);
-      lines[i].style.setProperty('--gy', `${Math.round(OFFSETS[s] * 0.35)}px`);
-    });
+    const shown = show(frame);
+    // The blurred side fill only exists on screens wider than 4:3; skip it when it's hidden.
+    if (shown && shown.complete && shown.currentSrc && backdrop.offsetParent !== null) backdrop.src = shown.currentSrc;
+    lines[0].classList.toggle('is-on', t >= 0.08);
+    lines[1].classList.toggle('is-on', t >= 0.28);
+    const sweep = clamp01((t - 0.45) / 0.5);
+    bar.classList.toggle('is-on', sweep > 0);
+    bar.style.setProperty('--bar', 0.2 + 0.8 * sweep);
     const pct = Math.round(p * 100);
     counter.textContent = `${pct}%`;
     meter.style.width = `${pct}%`;
@@ -80,7 +84,6 @@ function initTour() {
   const tour = document.querySelector('[data-tour]');
   const stage = tour.querySelector('.tour__stage');
   const show = frameStack(tour.querySelector('[data-tour-frames]'), 'tour', TOUR_FRAMES);
-  const meter = tour.querySelector('[data-tour-meter]');
   const hint = tour.querySelector('[data-tour-hint]');
   const board = tour.querySelector('[data-flaps]');
 
@@ -154,7 +157,6 @@ function initTour() {
       }
     });
 
-    meter.style.width = `${Math.round(clamp01(ty / TOTAL) * 100)}%`;
     hint.style.opacity = ty < 60 ? 1 : 0;
   };
 
@@ -213,3 +215,5 @@ window.addEventListener('resize', schedule);
 update();
 
 initSignup();
+
+initNav();

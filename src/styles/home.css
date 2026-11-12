@@ -1,23 +1,3 @@
-/* Shared by the hero and the tour: a line of display type with an offset ghost copy behind it */
-.ghost-line {
-  position: relative;
-  display: block;
-  padding: 0.04em 0.05em;
-}
-
-.ghost {
-  position: absolute;
-  left: 0.05em;
-  top: 0.04em;
-  color: var(--ghost, var(--deep));
-  transform: translate(var(--gx, 0px), var(--gy, 0px));
-}
-
-.ghost-line__text {
-  position: relative;
-  display: block;
-}
-
 .meter {
   flex: 0 1 360px;
   height: 4px;
@@ -35,7 +15,7 @@
 /* Hero: a sticky stage that scrubs a sequence of frames while the page scrolls past */
 .hero {
   position: relative;
-  height: calc(100svh + 300svh);
+  height: calc(100svh + 350svh);
   background: var(--black);
   color: var(--white);
 }
@@ -47,12 +27,40 @@
   min-height: 480px;
   overflow: hidden;
   background: var(--black);
+  container-type: size;
+}
+
+/* The frames are 4:3. On anything wider than that the frame is shown whole, centred, and the sides are
+   filled with a blurred copy of the same frame instead of cropping half the photo away. */
+.hero__backdrop {
+  position: absolute;
+  inset: -40px;
+  display: none;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+  object-fit: cover;
+  filter: blur(36px) brightness(0.4) saturate(0.85);
 }
 
 .hero__frames {
   position: absolute;
-  inset: -8px;
+  top: -8px;
+  left: 50%;
+  width: min(calc(100cqw + 16px), calc(133.333cqh + 16px));
+  height: calc(100cqh + 16px);
+  transform: translateX(-50%);
   filter: url(#jjdirty) saturate(0.85);
+}
+
+@container (min-aspect-ratio: 4 / 3) {
+  .hero__backdrop {
+    display: block;
+  }
+
+  .hero__frames {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
 }
 
 .hero__frames img {
@@ -124,30 +132,51 @@
   background: linear-gradient(0deg, rgb(11 11 11 / 0.75), rgb(11 11 11 / 0));
 }
 
+/* Title sits bottom-left; a red bar sweeps in from the right edge toward "JERO" */
 .hero__title {
   position: absolute;
   inset: 0;
   margin: 0;
+  padding: 0 0 clamp(64px, 9vw, 120px) clamp(16px, 5vw, 72px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(120px, 27.8vw, 400px);
+  align-items: flex-start;
+  justify-content: flex-end;
+  font-size: clamp(70.4px, 12.1vw, 176px);
   line-height: 0.82;
   letter-spacing: -0.01em;
   color: var(--red);
   pointer-events: none;
 }
 
-.hero__title .ghost {
-  mix-blend-mode: multiply;
-}
-
-.hero__title .ghost-line {
+.hero__line {
+  display: block;
+  padding: 0.04em 0.05em;
   opacity: 0;
 }
 
-.hero__title .ghost-line.is-on {
+.hero__line.is-on {
+  opacity: 1;
+}
+
+.hero__word {
+  position: relative;
+  display: block;
+}
+
+.hero__bar {
+  position: absolute;
+  left: calc(100% + 0.09em);
+  top: 0.066em;
+  width: 100vw;
+  height: 0.476em;
+  background: var(--red);
+  transform-origin: 100% 50%;
+  transform: scaleX(var(--bar, 0.2));
+  opacity: 0;
+}
+
+.hero__bar.is-on {
   opacity: 1;
 }
 
@@ -179,10 +208,13 @@
 .hero.is-static .hero__stage {
   position: relative;
   height: clamp(560px, 62.5vw, 900px);
+  max-height: 100svh;
 }
 
-.hero.is-static .ghost-line {
+.hero.is-static .hero__line,
+.hero.is-static .hero__bar {
   opacity: 1;
+  --bar: 1;
 }
 
 .hero.is-static .hero__meter {
@@ -193,6 +225,10 @@
 .release {
   background: var(--lavender);
   color: var(--indigo);
+}
+
+.release .section {
+  padding-top: clamp(28px, 3.5vw, 50px);
 }
 
 .band {
@@ -269,13 +305,32 @@
 }
 
 .release__title {
-  margin: 0 0 28px;
-  font-size: clamp(80px, 11.5vw, 176px);
+  margin: 0;
+  font-size: clamp(56px, 8vw, 120px);
   line-height: 0.84;
+  color: var(--white);
 }
 
 .release__title span {
   display: block;
+}
+
+.release__copy {
+  margin-top: 24px;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.5;
+}
+
+.release__copy p {
+  margin: 0;
+}
+
+.release .btn-row {
+  margin-top: 28px;
 }
 
 /* Tour: sticky stage with a split-flap city board and a frame sequence */
@@ -287,17 +342,22 @@
 }
 
 .tour__stage {
+  --th: max(520px, 100svh);
+  --pad-y: clamp(24px, 4.4vw, 64px);
+  --pad-x: clamp(16px, 5vw, 72px);
+  --gap: clamp(24px, 3.3vw, 48px);
+  --band: calc(0.89 * clamp(64px, 11vw, 160px));
   position: sticky;
   top: 0;
-  height: 100svh;
-  min-height: 520px;
+  height: var(--th);
   box-sizing: border-box;
-  padding: clamp(24px, 4.4vw, 64px) 0 clamp(24px, 4.4vw, 64px) clamp(16px, 5vw, 72px);
+  padding: var(--pad-y) 0 var(--pad-y) var(--pad-x);
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  gap: clamp(24px, 3.3vw, 48px);
+  gap: var(--gap);
   overflow: hidden;
+  isolation: isolate;
 }
 
 .tour__copy {
@@ -311,25 +371,65 @@
 .tour__head {
   display: flex;
   flex-direction: column;
-  gap: clamp(24px, 3.9vw, 56px);
+  justify-content: space-between;
+  gap: 24px;
+  height: calc(var(--th) - var(--pad-y) - var(--band));
+}
+
+/* The title is pushed right so it overlaps the photo; a red bar runs from the left edge into "FORMA" */
+.tour__title-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  font-size: clamp(70.4px, 12.1vw, 176px);
+  margin-right: calc(-1 * (var(--gap) + 0.91em));
 }
 
 .tour__title {
-  --ghost: var(--red);
-  --gx: 6px;
-  --gy: 2px;
+  flex: none;
   margin: 0;
-  font-size: clamp(72px, 12.2vw, 176px);
+  font-size: 1em;
   line-height: 0.82;
   letter-spacing: -0.01em;
-  color: var(--white);
+  color: var(--red);
+}
+
+.tour__line {
+  display: block;
+  padding: 0.04em 0.05em;
+}
+
+.tour__word {
+  position: relative;
+  display: block;
+}
+
+.tour__bar {
+  position: absolute;
+  right: calc(100% + 16px);
+  top: 0.066em;
+  width: 100vw;
+  height: 0.476em;
+  background: var(--red);
 }
 
 .flaps {
+  position: relative;
   display: flex;
   gap: 6px;
   font-size: clamp(44px, 8.9vw, 128px);
   color: var(--white);
+}
+
+.flaps__band {
+  position: absolute;
+  z-index: -1;
+  left: calc(-1 * var(--pad-x));
+  top: 100%;
+  width: 100vw;
+  height: var(--band);
+  background: var(--red);
 }
 
 .flap {
@@ -375,19 +475,17 @@
 }
 
 .tour__meter {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 20px;
   height: 24px;
 }
 
-.tour .meter {
-  background: rgb(242 242 242 / 0.25);
-}
-
 .tour__frame {
   flex: 0 0 auto;
-  height: 85.8%;
+  height: calc(var(--th) * 0.858);
+  max-width: 40vw;
   aspect-ratio: 443 / 772;
   align-self: center;
   position: relative;
@@ -416,22 +514,33 @@
   opacity: 1;
 }
 
+/* Phones and portrait tablets: copy on top, photo underneath */
 @media (max-width: 760px) {
   .tour__stage {
+    --band: 28px;
     flex-direction: column;
-    padding-right: clamp(16px, 5vw, 72px);
+    padding-right: var(--pad-x);
   }
 
   .tour__copy {
     flex: 0 0 auto;
-    gap: 24px;
+    gap: calc(var(--band) + 12px);
+  }
+
+  .tour__head {
+    height: auto;
+  }
+
+  .tour__title-row {
+    margin-right: 0;
   }
 
   .tour__frame {
     flex: 1 1 0;
     height: auto;
+    max-width: 100%;
     min-height: 0;
-    margin: 0;
+    margin: 0 auto;
   }
 }
 
@@ -440,12 +549,12 @@
 }
 
 .tour.is-static .tour__stage {
+  --th: clamp(600px, 62.5vw, 900px);
   position: relative;
-  height: clamp(600px, 62.5vw, 900px);
 }
 
 .tour.is-static .tour__meter {
-  display: none;
+  visibility: hidden;
 }
 
 /* Dates */
@@ -496,48 +605,108 @@
   border-top: 3px solid var(--black);
 }
 
+/* Each row: date and city in big type, the venue as a tilted colour chip, the ticket link on the right.
+   Hovering a row turns it night blue and nudges it right. */
 .dates__item {
+  --vn: clamp(28px, 3.4vw, 52px);
+  --big: clamp(36px, 4.6vw, 68px);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 32px;
-  padding: 22px 0;
+  gap: calc(0.35 * var(--vn) + 8px) clamp(16px, 2.4vw, 36px);
+  padding: clamp(14px, 2vw, 24px) 0;
   border-bottom: 3px solid var(--black);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.dates__date,
+.dates__city {
+  flex: 0 0 auto;
+  font-size: var(--big);
+  line-height: 0.9;
+  white-space: nowrap;
+}
+
+.dates__date {
+  min-width: 3em;
+  color: var(--night);
+  transition: color 0.2s ease;
+}
+
+.dates__city {
+  width: 4.5em;
+}
+
+.dates__vs {
+  flex: 0 0 auto;
+  width: 8.6em;
+  font-size: var(--vn);
+}
+
+.dates__venue {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  margin: -0.35em 0;
+  padding: 0.22em 0.6em 0.3em;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: var(--vn);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  transform: rotate(var(--rot));
+}
+
+.dates .dates__tk {
+  margin-left: auto;
+  min-height: clamp(44px, 4vw, 60px);
+  padding: 0 clamp(18px, 2vw, 28px);
+  color: var(--black);
+  font-size: clamp(18px, 1.8vw, 26px);
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .dates__item:hover,
 .dates__item:focus-within {
-  background: var(--pink);
-  box-shadow: -16px 0 0 var(--pink), 16px 0 0 var(--pink);
+  background: var(--night);
+  color: var(--white);
+  transform: translateX(16px);
+  box-shadow: -16px 0 0 var(--night), 16px 0 0 var(--night);
 }
 
-.dates__date {
-  flex: 0 0 120px;
-  font-size: 36px;
-  line-height: 1;
-  white-space: nowrap;
+.dates__item:hover .dates__date,
+.dates__item:focus-within .dates__date {
+  color: var(--pink);
 }
 
-.dates__city {
-  flex: 1 1 220px;
-  font-weight: 700;
-  font-size: 22px;
-  text-transform: uppercase;
+.dates__item:hover .dates__tk,
+.dates__item:focus-within .dates__tk {
+  color: var(--white);
 }
 
-.dates__venue {
-  flex: 1 1 220px;
-  font-size: 19px;
+.dates__item:hover .brk::before,
+.dates__item:focus-within .brk::before {
+  background-size: 3px 100%, 3px 100%, 50% 3px, 50% 3px, 50% 3px, 50% 3px;
 }
 
-.dates .brk {
-  color: var(--black);
+.dates .dates__tk:hover,
+.dates .dates__tk:focus-visible {
+  background: var(--olive);
+  color: #fff;
 }
 
-/* Watch */
+.dates .dates__tk:hover::before,
+.dates .dates__tk:focus-visible::before {
+  color: var(--olive);
+}
+
+/* Watch: the video is capped so the title and the whole player fit in one screen */
 .watch {
   background: var(--red);
+}
+
+.watch .wrap {
+  max-width: min(var(--max), max(360px, calc((100svh - 2 * var(--section-y) - 0.98 * clamp(48px, 7vw, 112px) - clamp(28px, 4vw, 56px)) * 16 / 9)));
 }
 
 .watch__title {
@@ -565,12 +734,7 @@
   border: 0;
 }
 
-/* Signup sticker sits on the left, flush to the top */
-.signup__sticker--home {
-  align-self: flex-start;
-  height: clamp(180px, 24vw, 360px);
-}
-
+/* Signup: the sticker hangs from the top on Home and hides on small screens */
 @media (max-width: 800px) {
   .signup__sticker--home {
     display: none;

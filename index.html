@@ -21,25 +21,27 @@
 
 <nav class="nav" aria-label="Principal">
 <a class="nav__logo" href="./" aria-label="Jero Jones, inicio"><img src="/assets/logo-nav.svg" alt="jero jones" width="150" height="31"></a>
-<div class="nav__links">
+<div class="nav__links" id="nav-menu">
 <a class="navlink pen" href="./" aria-current="page">Inicio</a>
 <a class="navlink pen" href="quien.html">¿Quién es Jero Jones?</a>
 <a class="navlink pen" href="dance.html">Dance, dance, dance</a>
-<a class="btn btn--pink" href="dance.html">Escuchá</a>
 </div>
+<a class="btn btn--pink nav__cta" href="dance.html">Escuchá</a>
+<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" hidden data-nav-toggle><span class="visually-hidden" data-nav-label>Abrir menú</span><span class="nav__burger" aria-hidden="true"></span></button>
 </nav>
 
 <main id="contenido">
 <header class="hero is-static" data-hero aria-label="Jero Jones">
 <div class="hero__stage">
+<img class="hero__backdrop" src="/assets/hero/01.webp" alt="" aria-hidden="true" data-backdrop>
 <div class="hero__frames" data-frames><img src="/assets/hero/01.webp" alt="" fetchpriority="high"></div>
 <div class="hero__grain" aria-hidden="true"><svg><rect width="100%" height="100%" filter="url(#jjg)"/></svg></div>
 <div class="hero__vignette" aria-hidden="true"></div>
 <div class="hero__fade hero__fade--top" aria-hidden="true"></div>
 <div class="hero__fade hero__fade--bottom" aria-hidden="true"></div>
 <h1 class="hero__title cond">
-<span class="ghost-line" data-line><span class="ghost" aria-hidden="true">Jero</span><span class="ghost-line__text">Jero</span></span>
-<span class="ghost-line" data-line><span class="ghost" aria-hidden="true">Jones</span><span class="ghost-line__text">Jones</span></span>
+<span class="hero__line" data-line><span class="hero__word">Jero<span class="hero__bar" aria-hidden="true" data-bar></span></span></span>
+<span class="hero__line" data-line><span class="hero__word">Jones</span></span>
 </h1>
 <div class="hero__meter">
 <span class="kick hero__counter" data-counter>0%</span>
@@ -63,6 +65,10 @@
 <div class="release__body">
 <p class="release__kicker"><span>Nuevo single · 2026</span></p>
 <h2 class="release__title cond"><span>Tipos y</span><span>minas</span></h2>
+<div class="release__copy">
+<p>Jero Jones y Marttein combinan sus universos musicales y visuales para darle forma a «Tipos y minas». Una unión entre artistas que difieren en las formas, pero comparten una misma búsqueda.</p>
+<p>La colaboración se construye a partir de contrapuntos y enfrentamientos. Marttein lleva su costado más techno e industrial que choca con la prioridad bailable de Jero Jones. No construyen un alboroto, hacen una pista de baile en los mismos estribillos.</p>
+</div>
 <div class="btn-row">
 <a class="btn btn--indigo" href="https://open.spotify.com/album/1ChzP6zh0dtIzHlBNQF1Gx" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.5em" height="1.5em"><circle cx="12" cy="12" r="12" fill="currentColor"/><g fill="none" stroke="#293484" stroke-linecap="round"><path d="M5.2 8.6c4.4-1.3 9.4-.9 13.6 1.4" stroke-width="2.2"/><path d="M6 12.4c3.7-1 7.7-.7 11.1 1.2" stroke-width="1.9"/><path d="M6.9 15.9c3-.8 6-.5 8.6.9" stroke-width="1.6"/></g></svg>Spotify</a>
 <a class="btn btn--indigo" href="https://music.apple.com/es/song/tipos-y-minas-feat-marttein/6812893528" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="1.5em" height="1.5em"><rect width="24" height="24" rx="6" fill="currentColor"/><path d="M16.6 4.8 9.8 6.3a.8.8 0 0 0-.6.8v8.4a2.3 2.3 0 1 0 1.5 2.1V9.6l4.5-1v5.6a2.3 2.3 0 1 0 1.5 2.1V5.6a.8.8 0 0 0-1.1-.8z" fill="#293484"/></svg>Apple Music</a>
@@ -77,15 +83,16 @@
 <div class="tour__stage">
 <div class="tour__copy">
 <div class="tour__head">
+<div class="tour__title-row">
 <h2 class="tour__title cond">
-<span class="ghost-line"><span class="ghost" aria-hidden="true">Forma</span><span class="ghost-line__text">Forma</span></span>
-<span class="ghost-line"><span class="ghost" aria-hidden="true">De</span><span class="ghost-line__text">De</span></span>
-<span class="ghost-line"><span class="ghost" aria-hidden="true">Onda</span><span class="ghost-line__text">Onda</span></span>
+<span class="tour__line"><span class="tour__word">Forma<span class="tour__bar" aria-hidden="true"></span></span></span>
+<span class="tour__line"><span class="tour__word">De</span></span>
+<span class="tour__line"><span class="tour__word">Onda</span></span>
 </h2>
-<div class="flaps cond" role="img" aria-label="CABA, La Plata, Rosario, Córdoba y Quilmes" data-flaps></div>
+</div>
+<div class="flaps cond" role="img" aria-label="CABA, La Plata, Rosario, Córdoba y Quilmes" data-flaps><span class="flaps__band" aria-hidden="true"></span></div>
 </div>
 <div class="tour__meter">
-<div class="meter" aria-hidden="true"><div class="meter__fill" data-tour-meter></div></div>
 <span class="kick" data-tour-hint>Scrolleá ↓</span>
 </div>
 </div>
@@ -100,19 +107,19 @@
 <span class="dates__q2 block cond" aria-hidden="true">nos vemos?</span>
 </div>
 <ul class="dates__list">
-<li class="dates__item"><span class="dates__date cond">01 Nov</span><span class="dates__city">CABA</span><span class="dates__venue">The Roxy</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
-<li class="dates__item"><span class="dates__date cond">13 Nov</span><span class="dates__city">La Plata</span><span class="dates__venue">Guajira</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
-<li class="dates__item"><span class="dates__date cond">21 Nov</span><span class="dates__city">Rosario</span><span class="dates__venue">Capitán</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
-<li class="dates__item"><span class="dates__date cond">28 Nov</span><span class="dates__city">Córdoba</span><span class="dates__venue">Un Mundo Feliz</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
-<li class="dates__item"><span class="dates__date cond">11 Dic</span><span class="dates__city">CABA</span><span class="dates__venue">CC Konex</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
-<li class="dates__item"><span class="dates__date cond">19 Dic</span><span class="dates__city">Quilmes</span><span class="dates__venue">Club Tucumán</span><a class="brk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener">Quiero mi entrada</a></li>
+<li class="dates__item"><span class="dates__date cond">01 Nov</span><span class="dates__city cond">CABA</span><span class="dates__vs"><span class="dates__venue cond" style="--bg: var(--plum); --fg: var(--paper); --rot: -3deg">The Roxy</span></span><a class="brk dates__tk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener" aria-label="Quiero ir: CABA, 01 nov, The Roxy">Quiero ir</a></li>
+<li class="dates__item"><span class="dates__date cond">13 Nov</span><span class="dates__city cond">La Plata</span><span class="dates__vs"><span class="dates__venue cond" style="--bg: var(--pink); --fg: var(--black); --rot: 2deg">Guajira</span></span><a class="brk dates__tk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener" aria-label="Quiero ir: La Plata, 13 nov, Guajira">Quiero ir</a></li>
+<li class="dates__item"><span class="dates__date cond">21 Nov</span><span class="dates__city cond">Rosario</span><span class="dates__vs"><span class="dates__venue cond" style="--bg: var(--indigo); --fg: var(--paper); --rot: -1.5deg">Capitán</span></span><a class="brk dates__tk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener" aria-label="Quiero ir: Rosario, 21 nov, Capitán">Quiero ir</a></li>
+<li class="dates__item"><span class="dates__date cond">28 Nov</span><span class="dates__city cond">Córdoba</span><span class="dates__vs"><span class="dates__venue cond" style="--bg: var(--red); --fg: var(--paper); --rot: 3deg">Un Mundo Feliz</span></span><a class="brk dates__tk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener" aria-label="Quiero ir: Córdoba, 28 nov, Un Mundo Feliz">Quiero ir</a></li>
+<li class="dates__item"><span class="dates__date cond">11 Dic</span><span class="dates__city cond">CABA</span><span class="dates__vs"><span class="dates__venue cond" style="--bg: var(--lavender); --fg: var(--indigo); --rot: -2.5deg">CC Konex</span></span><a class="brk dates__tk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener" aria-label="Quiero ir: CABA, 11 dic, CC Konex">Quiero ir</a></li>
+<li class="dates__item"><span class="dates__date cond">19 Dic</span><span class="dates__city cond">Quilmes</span><span class="dates__vs"><span class="dates__venue cond" style="--bg: var(--black); --fg: var(--pink); --rot: 1.5deg">Club Tucumán</span></span><a class="brk dates__tk" href="https://www.ticketek.com.ar/" target="_blank" rel="noopener" aria-label="Quiero ir: Quilmes, 19 dic, Club Tucumán">Quiero ir</a></li>
 </ul>
 </div>
 </section>
 
 <section class="watch section">
 <div class="wrap">
-<h2 class="watch__title cond fit-cap">Mirá</h2>
+<h2 class="watch__title cond fit-cap">Disco y TV</h2>
 <div class="watch__frame">
 <iframe src="https://www.youtube-nocookie.com/embed/w0sPaSkhMdg?rel=0&playsinline=1" title="Jero Jones en YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
@@ -122,8 +129,10 @@
 <section class="signup" aria-labelledby="signup-title">
 <div class="wrap signup__grid">
 <img class="signup__sticker signup__sticker--home" src="/assets/stickers/home-signup.png" alt="" aria-hidden="true" loading="lazy">
+<div class="signup__head">
+<h2 id="signup-title" class="signup__title cond"><span>¿Te aviso</span><span>cuando pase algo?</span></h2>
+</div>
 <div class="signup__body" aria-live="polite">
-<h2 id="signup-title" class="signup__title cond"><span>¿Te aviso</span><span class="fit-cap">cuando pase algo?</span></h2>
 <form class="signup__form" data-signup novalidate>
 <label class="signup__field"><span class="visually-hidden">Tu mail</span><input name="email" type="email" required autocomplete="email" placeholder="tu@mail.com"></label>
 <button class="btn" type="submit">Avisame</button>

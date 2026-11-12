@@ -2,6 +2,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/dance.css';
+import { initNav } from './nav.js';
 import { releases } from './releases.js';
 import { playSound, stopSound } from './audio.js';
 
@@ -182,3 +183,5 @@ function renderPlayer() {
 }
 
 window.addEventListener('pagehide', stopSound);
+
+initNav();

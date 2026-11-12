@@ -13,6 +13,7 @@
 
 .nav__logo {
   display: block;
+  margin-right: auto;
 }
 
 .nav__logo img {
@@ -26,6 +27,138 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 28px;
+}
+
+/* Hamburger (only shown on small screens once nav.js has run) */
+.nav__toggle {
+  position: relative;
+  display: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.nav__burger,
+.nav__burger::before,
+.nav__burger::after {
+  position: absolute;
+  left: 10px;
+  width: 28px;
+  height: 4px;
+  background: currentColor;
+  transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.2, 1), opacity 0.2s;
+}
+
+.nav__burger {
+  top: 22px;
+}
+
+.nav__burger::before,
+.nav__burger::after {
+  content: '';
+  left: 0;
+}
+
+.nav__burger::before {
+  top: -9px;
+}
+
+.nav__burger::after {
+  top: 9px;
+  width: 20px;
+}
+
+.nav.is-open .nav__burger {
+  background: transparent;
+}
+
+.nav.is-open .nav__burger::before {
+  transform: translateY(9px) rotate(45deg);
+  background: var(--pink);
+}
+
+.nav.is-open .nav__burger::after {
+  width: 28px;
+  transform: translateY(-9px) rotate(-45deg);
+  background: var(--pink);
+}
+
+@media (max-width: 900px) {
+  .nav.has-js {
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .nav.has-js .nav__logo img {
+    width: 124px;
+  }
+
+  .nav.has-js .nav__toggle {
+    display: block;
+    margin-right: -10px;
+  }
+
+  .nav.has-js .nav__cta {
+    min-height: 44px;
+    padding: 0 18px;
+  }
+
+  /* Full-screen menu. It sits behind the bar (negative z inside the nav's stacking context), so the
+     logo, the CTA and the close button stay on top. */
+  .nav.has-js .nav__links {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: clamp(8px, 2.5svh, 20px);
+    padding: 96px var(--gutter) 48px;
+    background: var(--black);
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .nav.has-js.is-open .nav__links {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Fades are switched on one frame after load so the menu doesn't flash while nav.js takes over */
+  .nav.is-ready .nav__links {
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
+
+  .nav.is-ready.is-open .nav__links {
+    transition: opacity 0.2s ease;
+  }
+
+  .nav.has-js .navlink {
+    font-family: var(--font-cond);
+    font-stretch: condensed;
+    font-weight: 900;
+    font-size: clamp(44px, 13vw, 76px);
+    line-height: 0.95;
+    letter-spacing: 0;
+    padding: 8px 0 14px;
+  }
+
+  .nav.has-js .navlink.pen::after {
+    height: 10px;
+    bottom: 4px;
+  }
+}
+
+html.menu-open {
+  overflow: hidden;
 }
 
 .navlink {
@@ -157,60 +290,91 @@
   background-size: 3px 100%, 3px 100%, 50% 3px, 50% 3px, 50% 3px, 50% 3px;
 }
 
-/* Newsletter signup (pink band shared by Home and Quién) */
+/* Newsletter signup (pink band shared by Home and Quién).
+   The title sits on a black band that bleeds off the left edge; the form gets its own row. */
 .signup {
   background: var(--pink);
   color: var(--black);
   padding: 0 var(--gutter);
   overflow: hidden;
+  isolation: isolate;
 }
 
 .signup__grid {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 0 clamp(24px, 5vw, 80px);
 }
 
+/* The sticker only drops to the band's top padding while it shares the row with the title
+   (the calc flips from a huge negative to a huge positive number once the row wraps). */
 .signup__sticker {
+  --stk-h: clamp(166px, 22vw, 331px);
   display: block;
   flex: none;
+  height: var(--stk-h);
   width: auto;
   max-width: 100%;
+  margin-top: clamp(0px, calc((100% - (var(--stk-ratio, 1.245) * var(--stk-h) + clamp(24px, 5vw, 80px) + 380px)) * 1000), clamp(32px, 4.5vw, 72px));
 }
 
-.signup__body {
+.signup__head {
   flex: 1 1 380px;
   min-width: 0;
-  align-self: center;
-  padding: clamp(32px, 4.5vw, 72px) 0;
+  align-self: flex-start;
+  padding-top: clamp(32px, 4.5vw, 72px);
 }
 
 .signup__title {
-  margin: 0 0 clamp(20px, 2.5vw, 36px);
+  position: relative;
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  padding: 0.3em 0 calc(0.2em + 12px);
+  color: var(--paper);
   font-size: clamp(48px, 7vw, 112px);
   line-height: 0.88;
 }
 
-.signup__title .fit-cap {
+.signup__title::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100vw;
   background: var(--black);
-  color: var(--paper);
-  padding: 0 0.18em 0.1em;
+}
+
+.signup__title span {
+  padding: 0 0.18em;
+  line-height: 0.88;
+}
+
+.signup__title span:last-child {
+  padding-bottom: 0.1em;
+}
+
+.signup__body {
+  flex: 0 0 100%;
+  padding: clamp(20px, 2.5vw, 36px) 0 clamp(32px, 4.5vw, 72px);
 }
 
 .signup__form {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 14px 18px;
   align-items: center;
 }
 
 .signup__field {
-  flex: 1 1 260px;
-  max-width: 460px;
+  flex: 1 1 320px;
+  max-width: 640px;
 }
 
 .signup__field input {
@@ -240,6 +404,7 @@
   flex-basis: 100%;
   margin: 0;
   font-weight: 700;
+  text-align: right;
 }
 
 .signup__done {
@@ -264,7 +429,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 28px;
 }
 
@@ -297,5 +462,5 @@
 .footer__legal {
   margin: 28px auto 0;
   font-size: 13px;
-  color: var(--lavender);
+  color: #fff;
 }
