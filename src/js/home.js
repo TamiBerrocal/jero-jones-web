@@ -84,16 +84,18 @@ function initTour() {
   const hint = tour.querySelector('[data-tour-hint]');
   const board = tour.querySelector('[data-flaps]');
 
-  // Distances in the canvas's own units: 300 to reveal the first city, then 3000 for the five cities.
-  const INTRO = 300;
-  const RUN = 3000;
-  const TOTAL = INTRO + RUN;
-  const SEGMENT = RUN / 5;
-  const SEQ = ' ABCDEFGHIJKLMNÑOÓPQRSTUVWXYZ';
-  const SLOTS = 8;
+  // The board rolls through the five cities and lands on "TOUR 2026".
+  // Distances in the canvas's own units: 300 to reveal the first city, then 600 per item.
+  const SEQ = ' ABCDEFGHIJKLMNÑOÓPQRSTUVWXYZ0123456789';
+  const SLOTS = 9;
   const pad = (x) => (x + ' '.repeat(SLOTS)).slice(0, SLOTS);
-  const CITIES = ['CABA', 'LA PLATA', 'ROSARIO', 'CÓRDOBA', 'QUILMES'].map(pad);
+  const ITEMS = ['CABA', 'LA PLATA', 'ROSARIO', 'CÓRDOBA', 'QUILMES', 'TOUR 2026'].map(pad);
+  const LAST = ITEMS.length - 1;
   const BLANK = pad('');
+  const INTRO = 300;
+  const SEGMENT = 600;
+  const RUN = SEGMENT * ITEMS.length;
+  const TOTAL = INTRO + RUN;
 
   const cells = Array.from({ length: SLOTS }, () => {
     const cell = document.createElement('div');
@@ -112,10 +114,15 @@ function initTour() {
     return { travel, scale: travel > 0 ? TOTAL / travel : 0 };
   };
 
+  // Once the board lands on "TOUR 2026" it stays there, so scrolling back up doesn't rewind it. It re-arms
+  // when the section is fully below the viewport again (the user went back up to the hero).
+  let done = false;
+
   const render = () => {
     const { scale } = units();
-    const raw = -tour.getBoundingClientRect().top * scale;
-    const ty = Math.max(0, Math.round(raw / 6) * 6);
+    const top = tour.getBoundingClientRect().top;
+    if (top >= window.innerHeight) done = false;
+    const ty = done ? TOTAL : Math.max(0, Math.round((-top * scale) / 6) * 6);
 
     show(Math.round(clamp01((ty - INTRO) / RUN) * (TOUR_FRAMES - 1)));
 
@@ -123,18 +130,19 @@ function initTour() {
     let to = BLANK;
     let u = 0;
     if (ty < INTRO) {
-      to = CITIES[0];
+      to = ITEMS[0];
       u = ty / INTRO;
     } else {
-      const sp = clamp01((ty - INTRO) / RUN) * 5;
-      const i = Math.min(4, Math.floor(sp));
+      const sp = clamp01((ty - INTRO) / RUN) * ITEMS.length;
+      const i = Math.min(LAST, Math.floor(sp));
       const fr = sp - i;
-      from = CITIES[i];
-      to = CITIES[i];
-      if (i < 4 && fr > 0.5) {
-        to = CITIES[i + 1];
+      from = ITEMS[i];
+      to = ITEMS[i];
+      if (i < LAST && fr > 0.5) {
+        to = ITEMS[i + 1];
         u = (fr - 0.5) / 0.5;
       }
+      if (i === LAST) done = true;
     }
 
     cells.forEach((cell, i) => {
@@ -157,21 +165,22 @@ function initTour() {
     hint.style.opacity = ty < 60 ? 1 : 0;
   };
 
-  // When scrolling stops halfway between two cities, glide to the next one in the scroll direction.
+  // When scrolling down stops halfway between two items, glide to the next one. Never snap while scrolling
+  // up or once the board is frozen, so it doesn't fight the user.
   let lastY = window.scrollY;
   let direction = 1;
   let idle;
   const snap = () => {
     const { travel, scale } = units();
-    if (!scale) return;
+    if (!scale || done || direction < 0) return;
     const top = tour.getBoundingClientRect().top + window.scrollY;
     const cy = (window.scrollY - top) * scale;
     let target = null;
-    if (cy >= 0 && cy < INTRO) target = direction > 0 ? INTRO : -20;
+    if (cy >= 0 && cy < INTRO) target = INTRO;
     else if (cy >= INTRO && cy < TOTAL) {
       const sp = (cy - INTRO) / SEGMENT;
-      const i = Math.min(4, Math.floor(sp));
-      if (i < 4 && sp - i > 0.5) target = direction > 0 ? INTRO + (i + 1) * SEGMENT : INTRO + (i + 0.5) * SEGMENT - 2;
+      const i = Math.min(LAST, Math.floor(sp));
+      if (i < LAST && sp - i > 0.5) target = INTRO + (i + 1) * SEGMENT;
     }
     if (target === null || Math.abs(target - cy) <= 1) return;
     window.scrollTo({

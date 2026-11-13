@@ -309,7 +309,7 @@
 /* Tour: sticky stage with a split-flap city board and a frame sequence */
 .tour {
   position: relative;
-  height: calc(100svh + 3300px);
+  height: calc(100svh + 3900px);
   background: var(--deep);
   color: var(--white);
 }
