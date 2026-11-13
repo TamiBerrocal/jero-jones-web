@@ -114,14 +114,33 @@ function initTour() {
     return { travel, scale: travel > 0 ? TOTAL / travel : 0 };
   };
 
-  // Once the board lands on "TOUR 2026" it stays there, so scrolling back up doesn't rewind it. It re-arms
-  // when the section is fully below the viewport again (the user went back up to the hero).
+  // Once the board lands on "TOUR 2026" it stays there. As soon as the user scrolls up, or the section has
+  // scrolled out above the viewport, the tall section collapses to the height of its stage, so scrolling
+  // back up passes it like any other block instead of sitting on a pinned, frozen stage. The scroll position
+  // is compensated so nothing on screen jumps. Everything re-arms when the section is fully below the
+  // viewport again (the user went back up to the hero).
   let done = false;
+  let collapsed = false;
+  let lastY = window.scrollY;
+  let direction = 1;
+
+  const setCollapsed = (on) => {
+    const before = stage.getBoundingClientRect().top;
+    collapsed = on;
+    tour.classList.toggle('is-collapsed', on);
+    if (on) window.scrollBy(0, stage.getBoundingClientRect().top - before);
+    lastY = window.scrollY;
+  };
 
   const render = () => {
+    const rect = tour.getBoundingClientRect();
+    if (rect.top >= window.innerHeight) {
+      done = false;
+      if (collapsed) setCollapsed(false);
+    }
+    if (done && !collapsed && (direction < 0 || rect.bottom <= 0)) setCollapsed(true);
     const { scale } = units();
     const top = tour.getBoundingClientRect().top;
-    if (top >= window.innerHeight) done = false;
     const ty = done ? TOTAL : Math.max(0, Math.round((-top * scale) / 6) * 6);
 
     show(Math.round(clamp01((ty - INTRO) / RUN) * (TOUR_FRAMES - 1)));
@@ -167,8 +186,6 @@ function initTour() {
 
   // When scrolling down stops halfway between two items, glide to the next one. Never snap while scrolling
   // up or once the board is frozen, so it doesn't fight the user.
-  let lastY = window.scrollY;
-  let direction = 1;
   let idle;
   const snap = () => {
     const { travel, scale } = units();

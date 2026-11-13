@@ -314,6 +314,11 @@
   color: var(--white);
 }
 
+/* After the board lands on "TOUR 2026": no more pinned travel, the section is just its stage */
+.tour.is-collapsed {
+  height: auto;
+}
+
 .tour__stage {
   --th: max(520px, 100svh);
   --pad-y: clamp(24px, 4.4vw, 64px);
