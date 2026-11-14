@@ -32,7 +32,9 @@
 
 .bio-hero__q {
   display: block;
-  font-size: clamp(80px, 12vw, 190px);
+  /* "¿Quién es" is ~4.3em wide and never wraps. The cap only bites on narrow phones, where the
+     design's 80px minimum would overflow the screen; every other width keeps the original size. */
+  font-size: min(clamp(80px, 12vw, 190px), (100vw - 2 * var(--gutter)) / 4.4);
   line-height: 0.82;
   color: var(--paper);
   white-space: nowrap;
@@ -41,7 +43,8 @@
 .bio-hero__name {
   background: var(--olive);
   color: var(--black);
-  font-size: clamp(88px, 13vw, 206px);
+  /* "Jones?" plus its tilt and offset needs ~3.85em: same narrow-phone-only cap for both names */
+  font-size: min(clamp(88px, 13vw, 206px), (100vw - 2 * var(--gutter)) / 4);
 }
 
 .bio-hero__name--tilt {
