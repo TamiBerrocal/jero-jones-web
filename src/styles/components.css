@@ -30,7 +30,7 @@
   gap: 4px 28px;
 }
 
-/* Hamburger (only shown on small screens once nav.js has run) */
+/* Hamburger (only shown in the compact nav, see .nav.is-compact) */
 .nav__toggle {
   position: relative;
   display: none;
@@ -88,74 +88,74 @@
   background: var(--pink);
 }
 
-@media (max-width: 900px) {
-  .nav.has-js {
-    flex-wrap: nowrap;
-    gap: 12px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
+/* Compact nav: nav.js adds .is-compact whenever logo + links + CTA would not fit on one row, so the
+   bar never wraps; the links then live behind the hamburger as a full-screen menu. */
+.nav.is-compact {
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
 
-  .nav.has-js .nav__logo img {
-    width: 124px;
-  }
+.nav.is-compact .nav__logo img {
+  width: 124px;
+}
 
-  .nav.has-js .nav__toggle {
-    display: block;
-    margin-right: -10px;
-  }
+.nav.is-compact .nav__toggle {
+  display: block;
+  margin-right: -10px;
+}
 
-  .nav.has-js .nav__cta {
-    min-height: 44px;
-    padding: 0 18px;
-  }
+.nav.is-compact .nav__cta {
+  min-height: 44px;
+  padding: 0 18px;
+}
 
-  /* Full-screen menu. It sits behind the bar (negative z inside the nav's stacking context), so the
-     logo, the CTA and the close button stay on top. */
-  .nav.has-js .nav__links {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    justify-content: center;
-    gap: clamp(8px, 2.5svh, 20px);
-    padding: 96px var(--gutter) 48px;
-    background: var(--black);
-    overflow-y: auto;
-    visibility: hidden;
-    opacity: 0;
-  }
+/* Full-screen menu. It sits behind the bar (negative z inside the nav's stacking context), so the
+   logo, the CTA and the close button stay on top. */
+.nav.is-compact .nav__links {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(8px, 2.5svh, 20px);
+  padding: 96px var(--gutter) 48px;
+  background: var(--black);
+  overflow-y: auto;
+  visibility: hidden;
+  opacity: 0;
+}
 
-  .nav.has-js.is-open .nav__links {
-    visibility: visible;
-    opacity: 1;
-  }
+.nav.is-compact.is-open .nav__links {
+  visibility: visible;
+  opacity: 1;
+}
 
-  /* Fades are switched on one frame after load so the menu doesn't flash while nav.js takes over */
-  .nav.is-ready .nav__links {
-    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-  }
+/* Fades are switched on one frame after load so the menu doesn't flash while nav.js takes over */
+.nav.is-compact.is-ready .nav__links {
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
 
-  .nav.is-ready.is-open .nav__links {
-    transition: opacity 0.2s ease;
-  }
+.nav.is-compact.is-ready.is-open .nav__links {
+  transition: opacity 0.2s ease;
+}
 
-  .nav.has-js .navlink {
-    font-family: var(--font-cond);
-    font-stretch: condensed;
-    font-weight: 900;
-    font-size: clamp(44px, 13vw, 76px);
-    line-height: 0.95;
-    letter-spacing: 0;
-    padding: 8px 0 14px;
-  }
+.nav.is-compact .navlink {
+  font-family: var(--font-cond);
+  font-stretch: condensed;
+  font-weight: 900;
+  font-size: clamp(44px, 13vw, 76px);
+  line-height: 0.95;
+  letter-spacing: 0;
+  padding: 8px 0 14px;
+}
 
-  .nav.has-js .navlink.pen::after {
-    height: 10px;
-    bottom: 4px;
-  }
+.nav.is-compact .navlink.pen::after {
+  height: 10px;
+  bottom: 4px;
 }
 
 html.menu-open {

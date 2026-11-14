@@ -1,6 +1,14 @@
-// Mobile menu: below the breakpoint the three page links collapse behind a toggle and open as a
-// full-screen overlay. Without JS the links simply wrap under the logo.
-const MOBILE = window.matchMedia('(max-width: 900px)');
+// Compact menu: the bar must never wrap to a second row. Whenever logo + links + CTA don't fit on one
+// row, the page links collapse behind a toggle and open as a full-screen overlay. Without JS the
+// links simply wrap under the logo.
+
+// True when the expanded layout would wrap: the links or the CTA drop below the logo's row.
+function wouldWrap(nav, logo, menu, cta) {
+  nav.classList.remove('is-compact');
+  const row = logo.getBoundingClientRect();
+  const rowMiddle = row.top + row.height / 2;
+  return [menu, cta].some((el) => el && el.getBoundingClientRect().top > rowMiddle);
+}
 
 export function initNav() {
   const nav = document.querySelector('.nav');
@@ -14,6 +22,8 @@ export function initNav() {
   if (!toggle || !menu) return;
 
   const label = toggle.querySelector('[data-nav-label]');
+  const logo = nav.querySelector('.nav__logo');
+  const cta = nav.querySelector('.nav__cta');
   nav.classList.add('has-js');
   toggle.hidden = false;
   requestAnimationFrame(() => requestAnimationFrame(() => nav.classList.add('is-ready')));
@@ -48,7 +58,15 @@ export function initNav() {
       first.focus();
     }
   });
-  MOBILE.addEventListener('change', (e) => {
-    if (!e.matches && nav.classList.contains('is-open')) setOpen(false, { focus: false });
-  });
+
+  // Measured synchronously (remove the class, read, re-add), so the expanded layout never paints.
+  const updateCompact = () => {
+    const compact = wouldWrap(nav, logo, menu, cta);
+    nav.classList.toggle('is-compact', compact);
+    if (!compact && nav.classList.contains('is-open')) setOpen(false, { focus: false });
+  };
+  updateCompact();
+  window.addEventListener('resize', updateCompact);
+  // The condensed and body fonts can change the links' width once they load.
+  document.fonts?.ready.then(updateCompact);
 }
