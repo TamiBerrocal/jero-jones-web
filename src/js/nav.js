@@ -4,6 +4,11 @@ const MOBILE = window.matchMedia('(max-width: 900px)');
 
 export function initNav() {
   const nav = document.querySelector('.nav');
+  if (!nav) return;
+  // The nav is fixed to the top; publish its real height so sticky stages and anchors sit below it.
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--nav-h', `${nav.offsetHeight}px`);
+  }).observe(nav);
   const toggle = nav?.querySelector('[data-nav-toggle]');
   const menu = nav?.querySelector('#nav-menu');
   if (!toggle || !menu) return;

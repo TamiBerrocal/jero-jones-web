@@ -26,6 +26,7 @@
   --section-y: clamp(48px, 7vw, 112px);
   --max: 1280px;
   --max-wide: 1320px;
+  --nav-h: 64px; /* height of the fixed nav; nav.js keeps it in sync with the real bar */
 }
 
 @font-face {

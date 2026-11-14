@@ -39,10 +39,13 @@ function frameStack(container, folder, count) {
   };
 }
 
+// Where a sticky stage pins (below the fixed nav), in px from the viewport top.
+const stickyTop = (stage) => parseFloat(getComputedStyle(stage).top) || 0;
+
 // Progress (0–1) of a tall section whose sticky stage is pinned while it scrolls past.
 function pinProgress(section, stage) {
   const travel = section.offsetHeight - stage.offsetHeight;
-  return travel > 0 ? clamp01(-section.getBoundingClientRect().top / travel) : 0;
+  return travel > 0 ? clamp01((stickyTop(stage) - section.getBoundingClientRect().top) / travel) : 0;
 }
 
 /* Hero: the first 3000/4500 of the scroll scrubs the frames, the rest reveals the title and sweeps in the bar */
@@ -140,7 +143,7 @@ function initTour() {
     }
     if (done && !collapsed && (direction < 0 || rect.bottom <= 0)) setCollapsed(true);
     const { scale } = units();
-    const top = tour.getBoundingClientRect().top;
+    const top = tour.getBoundingClientRect().top - stickyTop(stage);
     const ty = done ? TOTAL : Math.max(0, Math.round((-top * scale) / 6) * 6);
 
     show(Math.round(clamp01((ty - INTRO) / RUN) * (TOUR_FRAMES - 1)));
@@ -190,7 +193,7 @@ function initTour() {
   const snap = () => {
     const { travel, scale } = units();
     if (!scale || done || direction < 0) return;
-    const top = tour.getBoundingClientRect().top + window.scrollY;
+    const top = tour.getBoundingClientRect().top + window.scrollY - stickyTop(stage);
     const cy = (window.scrollY - top) * scale;
     let target = null;
     if (cy >= 0 && cy < INTRO) target = INTRO;

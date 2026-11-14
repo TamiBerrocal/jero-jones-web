@@ -22,8 +22,8 @@
 
 .hero__stage {
   position: sticky;
-  top: 0;
-  height: 100svh;
+  top: var(--nav-h);
+  height: calc(100svh - var(--nav-h));
   min-height: 480px;
   overflow: hidden;
   background: var(--black);
@@ -42,7 +42,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 0%;
+  object-position: 50% 50%;
   display: block;
   opacity: 0;
 }
@@ -181,7 +181,7 @@
 .hero.is-static .hero__stage {
   position: relative;
   height: clamp(560px, 62.5vw, 900px);
-  max-height: 100svh;
+  max-height: calc(100svh - var(--nav-h));
 }
 
 .hero.is-static .hero__line,
@@ -320,13 +320,13 @@
 }
 
 .tour__stage {
-  --th: max(520px, 100svh);
+  --th: max(520px, calc(100svh - var(--nav-h)));
   --pad-y: clamp(24px, 4.4vw, 64px);
   --pad-x: clamp(16px, 5vw, 72px);
   --gap: clamp(24px, 3.3vw, 48px);
   --band: calc(0.89 * clamp(64px, 11vw, 160px));
   position: sticky;
-  top: 0;
+  top: var(--nav-h);
   height: var(--th);
   box-sizing: border-box;
   padding: var(--pad-y) 0 var(--pad-y) var(--pad-x);
@@ -684,7 +684,7 @@
 }
 
 .watch .wrap {
-  max-width: min(var(--max), max(360px, calc((100svh - 2 * var(--section-y) - 0.98 * clamp(30px, 3.4vw, 56px) - clamp(14px, 1.6vw, 24px)) * 16 / 9)));
+  max-width: min(var(--max), max(360px, calc((100svh - var(--nav-h) - 2 * var(--section-y) - 0.98 * clamp(30px, 3.4vw, 56px) - clamp(14px, 1.6vw, 24px)) * 16 / 9)));
 }
 
 .watch__title {
