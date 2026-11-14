@@ -204,9 +204,12 @@
   padding-top: clamp(28px, 3.5vw, 50px);
 }
 
+/* The tilted strip rises sin(2.5deg) ≈ 0.0436 of its width (100vw + 80px), so on wide screens it
+   needs more height than 120px. The band grows with the viewport and centers the strip, so its top and
+   bottom edges are never clipped: strip height (56px) + rise (≈3.5px + 4.36vw) + 8px air on each side. */
 .band {
   position: relative;
-  height: 120px;
+  height: max(120px, calc(76px + 4.4vw));
   overflow: hidden;
 }
 
@@ -214,8 +217,8 @@
   position: absolute;
   left: -40px;
   right: -40px;
-  top: 34px;
-  transform: rotate(-2.5deg);
+  top: 50%;
+  transform: translateY(-50%) rotate(-2.5deg);
   background: var(--red);
   color: var(--white);
   font-size: 34px;
