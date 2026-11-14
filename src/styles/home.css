@@ -357,51 +357,84 @@
   --btn-shadow: var(--pink);
 }
 
-/* Staggered columns so pieces of any aspect ratio sit like a hand-made collage */
+/* Packed collage: fixed-height stage; fan-wall.js sizes and scatters the pieces inside it */
+.fans__stage {
+  position: relative;
+  min-height: clamp(420px, 52vw, 640px);
+}
+
 .fans__wall {
-  columns: 4 168px;
-  column-gap: clamp(16px, 2.4vw, 32px);
+  position: absolute;
+  inset: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.fan {
-  break-inside: avoid;
-  padding: 6px 8px clamp(20px, 2.6vw, 34px) 0;
+.fan__btn {
+  position: absolute;
+  width: var(--fan-size, 160px);
+  height: var(--fan-size, 160px);
+  padding: 0;
+  border: var(--fan-border, 2px) solid var(--black);
+  background: var(--lavender);
+  box-shadow: var(--fan-offset, 6px) var(--fan-offset, 6px) 0 var(--fan-shadow, var(--pink));
+  cursor: pointer;
+  transform: translate(-50%, -50%) rotate(var(--fan-tilt, 0deg));
+  transition: transform 0.18s ease-out;
 }
 
-.fan__card {
-  margin: 0;
-  background: var(--white);
-  border: 2px solid var(--black);
-  box-shadow: 8px 8px 0 var(--fan-shadow, var(--pink));
-  transform: rotate(var(--tilt, 0deg));
+.fan__btn:hover,
+.fan__btn:focus-visible,
+.fan__btn.is-active {
+  z-index: 10000 !important;
+  transform: translate(-50%, -50%) rotate(0deg) scale(var(--fan-hover-scale, 1.08));
+}
+
+.fan__btn:focus-visible {
+  outline: 3px solid var(--indigo);
+  outline-offset: 3px;
 }
 
 .fan__img {
   display: block;
   width: 100%;
-  height: auto;
-  border-bottom: 2px solid var(--black);
-  background: var(--lavender);
+  height: 100%;
+  object-fit: cover;
 }
 
-.fan__caption {
+/* Tooltip in the clue-sticker style: pink block, hard black shadow, condensed name */
+.fans__tip {
+  position: absolute;
+  z-index: 10001;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px 14px;
+  gap: 4px;
+  width: max-content;
+  max-width: min(300px, 100%);
+  padding: 8px 12px 10px;
+  background: var(--pink);
+  color: var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  pointer-events: none;
 }
 
-.fan__name {
-  font-size: clamp(24px, 2.2vw, 30px);
+.fans__tip[hidden] {
+  display: none;
+}
+
+.fans__tip-name {
+  font-size: 26px;
   line-height: 0.9;
 }
 
-.fan__comment {
+.fans__tip-comment {
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.35;
+}
+
+.fans__tip-comment[hidden] {
+  display: none;
 }
 
 .fans__empty {
@@ -411,7 +444,7 @@
   font-size: 18px;
 }
 
-.fans[data-empty] .fans__wall {
+.fans[data-empty] .fans__stage {
   display: none;
 }
 
