@@ -306,6 +306,119 @@
   margin-top: 28px;
 }
 
+/* Fans: the covers people sent from the microsite, pinned on a paper wall */
+.fans {
+  background: var(--paper);
+  color: var(--black);
+}
+
+.fans__inner {
+  margin: 0 auto;
+}
+
+.fans__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px clamp(32px, 5vw, 72px);
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+
+.fans__title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: clamp(54px, 9vw, 132px);
+  line-height: 0.86;
+}
+
+.fans__title-block {
+  margin-top: 0.06em;
+  background: var(--pink);
+  color: var(--black);
+}
+
+.fans__intro {
+  flex: 0 1 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.5;
+}
+
+.fans__intro p {
+  margin: 0;
+}
+
+.fans__intro .btn {
+  --btn-shadow: var(--pink);
+}
+
+/* Staggered columns so pieces of any aspect ratio sit like a hand-made collage */
+.fans__wall {
+  columns: 4 168px;
+  column-gap: clamp(16px, 2.4vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fan {
+  break-inside: avoid;
+  padding: 6px 8px clamp(20px, 2.6vw, 34px) 0;
+}
+
+.fan__card {
+  margin: 0;
+  background: var(--white);
+  border: 2px solid var(--black);
+  box-shadow: 8px 8px 0 var(--fan-shadow, var(--pink));
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.fan__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-bottom: 2px solid var(--black);
+  background: var(--lavender);
+}
+
+.fan__caption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.fan__name {
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 0.9;
+}
+
+.fan__comment {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.fans__empty {
+  display: none;
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.fans[data-empty] .fans__wall {
+  display: none;
+}
+
+.fans[data-empty] .fans__empty {
+  display: block;
+}
+
 /* Tour: sticky stage with a split-flap city board and a frame sequence */
 .tour {
   position: relative;

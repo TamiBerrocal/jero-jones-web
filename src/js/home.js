@@ -4,6 +4,7 @@ import '../styles/components.css';
 import '../styles/home.css';
 import { initNav } from './nav.js';
 import { initSignup } from './signup.js';
+import { initFanWall } from './fan-wall.js';
 
 const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
@@ -241,5 +242,6 @@ window.addEventListener('resize', schedule);
 update();
 
 initSignup();
+initFanWall();
 
 initNav();
