@@ -860,10 +860,3 @@
   height: 100%;
   border: 0;
 }
-
-/* Signup: the sticker hangs from the top on Home and hides on small screens */
-@media (max-width: 800px) {
-  .signup__sticker--home {
-    display: none;
-  }
-}

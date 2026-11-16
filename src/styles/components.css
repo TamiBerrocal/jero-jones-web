@@ -320,6 +320,13 @@ html.menu-open {
   margin-top: clamp(0px, calc((100% - (var(--stk-ratio, 1.245) * var(--stk-h) + clamp(24px, 5vw, 80px) + 380px)) * 1000), clamp(32px, 4.5vw, 72px));
 }
 
+/* The sticker photo hides on small screens on every page */
+@media (max-width: 800px) {
+  .signup__sticker {
+    display: none;
+  }
+}
+
 .signup__head {
   flex: 1 1 380px;
   min-width: 0;
