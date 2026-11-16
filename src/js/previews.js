@@ -1,6 +1,6 @@
 // Resolves each track's `appleId` into Apple's 30-second preview (`src`) and its Apple Music page (`appleUrl`).
 // Preview URLs can rotate, so they are looked up at runtime instead of being stored. The iTunes Lookup API is
-// public, keyless and CORS-enabled. If it fails, tracks keep no `src` and audio.js plays the synth sample.
+// public, keyless and CORS-enabled. If it fails, tracks stay not `playable`.
 
 const LOOKUP = 'https://itunes.apple.com/lookup';
 
@@ -17,9 +17,10 @@ export async function loadPreviews(releases) {
       const hit = byId.get(t.appleId);
       if (!hit?.previewUrl) return;
       t.src = hit.previewUrl;
+      t.playable = true;
       t.appleUrl = hit.trackViewUrl;
     });
   } catch {
-    // Offline or blocked: keep the synth fallback.
+    // Offline or blocked: the player shows tracks as not available.
   }
 }

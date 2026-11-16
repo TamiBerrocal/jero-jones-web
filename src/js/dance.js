@@ -10,7 +10,6 @@ import { loadPreviews } from './previews.js';
 const PREVIEW_SECONDS = 30;
 
 const state = { flipped: null, rel: null, trk: null, playing: false, t: 0 };
-let clock = null;
 
 const grid = document.querySelector('[data-releases]');
 const ui = {
@@ -113,15 +112,7 @@ function play(ri, ti, from = 0) {
   const playable = releases[ri].tracks[ti].playable;
   Object.assign(state, { rel: ri, trk: ti, playing: playable, t: from });
   stopSound();
-  clearInterval(clock);
-  // A real preview drives progress through onAudioTime / onAudioEnded; the synth fallback ticks its own clock.
-  if (playable && !playSound(releases[ri], ti, from)) {
-    clock = setInterval(() => {
-      state.t += 1;
-      if (state.t >= PREVIEW_SECONDS) go(1);
-      else renderProgress();
-    }, 1000);
-  }
+  if (playable) playSound(releases[ri].tracks[ti], from);
   renderPlayer();
 }
 
@@ -137,7 +128,6 @@ onAudioEnded(() => {
 function pause() {
   state.playing = false;
   stopSound();
-  clearInterval(clock);
   renderPlayer();
 }
 
@@ -166,7 +156,7 @@ function renderFlip() {
   });
 }
 
-// Previews and the synth sample both last PREVIEW_SECONDS, so the bar and total show that, not the full song.
+// Apple previews last PREVIEW_SECONDS, so the bar and total show that, not the full song.
 function renderProgress() {
   const total = Math.min(PREVIEW_SECONDS, seconds(current().duration));
   ui.elapsed.textContent = clockText(state.t);
@@ -211,7 +201,7 @@ function renderPlayer() {
 
 window.addEventListener('pagehide', stopSound);
 
-// Fill in real previews; until they arrive (or if the lookup fails) tracks play the synth sample.
+// Fill in the previews; until they arrive (or if the lookup fails) tracks show as not available.
 loadPreviews(releases).then(() => {
   if (state.rel !== null) renderPlayer();
 });
