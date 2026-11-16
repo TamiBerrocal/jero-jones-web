@@ -4,7 +4,8 @@ import '../styles/components.css';
 import '../styles/dance.css';
 import { initNav } from './nav.js';
 import { releases } from './releases.js';
-import { playSound, stopSound } from './audio.js';
+import { playSound, stopSound, onAudioTime, onAudioEnded } from './audio.js';
+import { loadPreviews } from './previews.js';
 
 const PREVIEW_SECONDS = 30;
 
@@ -26,6 +27,8 @@ const ui = {
   elapsed: document.querySelector('[data-player-elapsed]'),
   total: document.querySelector('[data-player-total]'),
   fill: document.querySelector('[data-player-fill]'),
+  source: document.querySelector('[data-player-source]'),
+  sourceLink: document.querySelector('[data-player-source-link]'),
 };
 
 const escape = (s) =>
@@ -34,7 +37,7 @@ const seconds = (mmss) => {
   const [m, s] = mmss.split(':').map(Number);
   return m * 60 + s;
 };
-const clockText = (n) => `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`;
+const clockText = (n) => `${Math.floor(n / 60)}:${String(Math.floor(n) % 60).padStart(2, '0')}`;
 
 function releaseMarkup(r, ri) {
   const tracks = r.tracks
@@ -73,6 +76,15 @@ function releaseMarkup(r, ri) {
 
 grid.innerHTML = releases.map(releaseMarkup).join('');
 
+// Mark a sleeve as turning while its flip runs, so track rows skip their hover state until it settles.
+const turning = (on) => (event) => {
+  if (event.propertyName !== 'transform' || !event.target.classList.contains('rec__card')) return;
+  event.target.closest('.rec').classList.toggle('is-turning', on);
+};
+grid.addEventListener('transitionrun', turning(true));
+grid.addEventListener('transitionend', turning(false));
+grid.addEventListener('transitioncancel', turning(false));
+
 grid.addEventListener('click', (event) => {
   const toggle = event.target.closest('[data-toggle]');
   if (toggle) {
@@ -102,8 +114,8 @@ function play(ri, ti, from = 0) {
   Object.assign(state, { rel: ri, trk: ti, playing: playable, t: from });
   stopSound();
   clearInterval(clock);
-  if (playable) {
-    playSound(releases[ri], ti);
+  // A real preview drives progress through onAudioTime / onAudioEnded; the synth fallback ticks its own clock.
+  if (playable && !playSound(releases[ri], ti, from)) {
     clock = setInterval(() => {
       state.t += 1;
       if (state.t >= PREVIEW_SECONDS) go(1);
@@ -112,6 +124,15 @@ function play(ri, ti, from = 0) {
   }
   renderPlayer();
 }
+
+onAudioTime((t, src) => {
+  if (!state.playing || src !== current().src) return;
+  state.t = t;
+  renderProgress();
+});
+onAudioEnded(() => {
+  if (state.playing) go(1);
+});
 
 function pause() {
   state.playing = false;
@@ -145,8 +166,9 @@ function renderFlip() {
   });
 }
 
+// Previews and the synth sample both last PREVIEW_SECONDS, so the bar and total show that, not the full song.
 function renderProgress() {
-  const total = seconds(current().duration);
+  const total = Math.min(PREVIEW_SECONDS, seconds(current().duration));
   ui.elapsed.textContent = clockText(state.t);
   ui.fill.style.width = `${Math.min(100, (state.t / total) * 100)}%`;
 }
@@ -161,7 +183,12 @@ function renderPlayer() {
   ui.eq.hidden = !state.playing;
   ui.iconPlay.toggleAttribute('hidden', state.playing);
   ui.iconPause.toggleAttribute('hidden', !state.playing);
-  ui.total.textContent = track.duration;
+  ui.total.textContent = clockText(Math.min(PREVIEW_SECONDS, seconds(track.duration)));
+  ui.source.hidden = !track.appleUrl;
+  if (track.appleUrl) {
+    ui.sourceLink.href = track.appleUrl;
+    ui.sourceLink.setAttribute('aria-label', `Escuchar ${track.name} completo en iTunes`);
+  }
 
   const available = track.playable;
   ui.toggle.setAttribute('aria-disabled', String(!available));
@@ -183,5 +210,10 @@ function renderPlayer() {
 }
 
 window.addEventListener('pagehide', stopSound);
+
+// Fill in real previews; until they arrive (or if the lookup fails) tracks play the synth sample.
+loadPreviews(releases).then(() => {
+  if (state.rel !== null) renderPlayer();
+});
 
 initNav();

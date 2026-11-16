@@ -201,7 +201,8 @@
   cursor: pointer;
 }
 
-.trk:hover {
+/* No hover while the sleeve is still turning: rows sweeping under the cursor would flicker */
+.rec:not(.is-turning) .trk:hover {
   background: rgb(0 0 0 / 0.18);
 }
 
@@ -316,11 +317,64 @@
 
 .player__release {
   margin: 4px 0 0;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
   font-size: 13px;
   color: var(--lavender);
+}
+
+.player__release > [data-player-release] {
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Apple's preview terms ask for a link back to the full song: an icon with a tooltip (.tip) */
+.player__source {
+  flex: 0 0 auto;
+}
+
+/* At the right edge, the tooltip hangs left from the icon instead of centering on it */
+.tip.player__source::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.player__source[hidden] {
+  display: none;
+}
+
+.player__source a {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pink);
+}
+
+/* Filled pink disc at rest; on hover/focus it opens up into the pink outline */
+.player__source-disc {
+  fill: currentColor;
+  transition: fill 0.15s;
+}
+
+.player__source-note {
+  color: var(--black);
+  transition: color 0.15s;
+}
+
+.player__source a:hover .player__source-disc,
+.player__source a:focus-visible .player__source-disc {
+  fill: transparent;
+}
+
+.player__source a:hover .player__source-note,
+.player__source a:focus-visible .player__source-note {
+  color: var(--pink);
 }
 
 .eq {
@@ -399,7 +453,7 @@
   cursor: not-allowed;
 }
 
-/* Tooltip shown when the selected track has no preview */
+/* Tooltip: the play button (track without a preview) and the iTunes link */
 .tip {
   position: relative;
   display: flex;
@@ -494,6 +548,10 @@
   .player__play {
     width: 48px;
     height: 48px;
+  }
+
+  .player__source a {
+    width: 36px;
   }
 
   .player__progress {

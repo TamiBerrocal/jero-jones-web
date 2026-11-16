@@ -1,5 +1,5 @@
-// Sound source for the Dance player. A track with `src` plays that file through an <audio>
-// element; otherwise a short synthesized arpeggio stands in as a sample.
+// Sound source for the Dance player. A track with `src` (an Apple preview, see previews.js) streams through an
+// <audio> element; otherwise a short synthesized arpeggio stands in as a sample.
 
 const SCALE = [0, 3, 7, 10, 12, 7, 3, 5];
 
@@ -7,6 +7,10 @@ let ctx = null;
 let sequence = null;
 const audioEl = new Audio();
 audioEl.preload = 'none';
+
+// Real previews report their own clock; dance.js listens here instead of ticking a timer.
+export const onAudioTime = (cb) => audioEl.addEventListener('timeupdate', () => cb(audioEl.currentTime, audioEl.src));
+export const onAudioEnded = (cb) => audioEl.addEventListener('ended', cb);
 
 function getContext() {
   const AC = window.AudioContext || window.webkitAudioContext;
@@ -24,15 +28,16 @@ export function stopSound() {
   audioEl.pause();
 }
 
-export function playSound(release, trackIndex) {
+// Returns true when a real preview is playing (the caller then follows onAudioTime / onAudioEnded).
+export function playSound(release, trackIndex, from = 0) {
   stopSound();
   const track = release.tracks[trackIndex];
 
   if (track.src) {
-    audioEl.src = track.src;
-    audioEl.currentTime = 0;
+    if (audioEl.src !== track.src) audioEl.src = track.src;
+    audioEl.currentTime = from;
     audioEl.play().catch(() => {});
-    return;
+    return true;
   }
 
   const ac = getContext();
@@ -53,4 +58,5 @@ export function playSound(release, trackIndex) {
     osc.stop(t0 + 0.22);
     step++;
   }, 160 - (trackIndex % 3) * 20);
+  return false;
 }

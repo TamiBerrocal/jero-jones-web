@@ -1,8 +1,9 @@
 const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 // Discography shown on the Dance page, newest first.
-// Tracks: `playable` marks the ones with a preview; add `src` (an MP3 under public/audio/) to play the real
-// preview instead of the synth sample. `synthRoot` only tunes the placeholder synth.
+// Tracks: `appleId` is the Apple Music / iTunes track id. previews.js resolves it at runtime into `src` (Apple's
+// 30-second preview) and `appleUrl`; until then, or if that lookup fails, the synth sample plays instead.
+// `synthRoot` only tunes that fallback synth.
 export const releases = [
   {
     id: 'amor',
@@ -15,7 +16,7 @@ export const releases = [
     backBg: '#EC8797',
     backInk: '#0B0B0B',
     synthRoot: 262,
-    tracks: tracks(['Tu Bar', 'Nada Más en Mí', 'Pretensión', 'Viajes de Metal', 'Amor'], ['5:09', '4:11', '3:33', '3:53', '3:29']),
+    tracks: tracks(['Tu Bar', 'Nada Más en Mí', 'Pretensión', 'Viajes de Metal', 'Amor'], ['5:09', '4:11', '3:33', '3:53', '3:29'], [6810538898, 6810538902, 6810538903, 6810538904, 6810538905]),
   },
   {
     id: 'circuito',
@@ -31,6 +32,7 @@ export const releases = [
     tracks: tracks(
       ['Crónicas', '¡Cambio, Cambio!', 'Sin Aire', 'OXI', '¿Qué Hacés?', 'Sueño Fatal', 'Mejor Adiós'],
       ['3:03', '3:10', '4:14', '2:30', '3:19', '3:51', '3:37'],
+      [6811039201, 6811039202, 6811039204, 6811039206, 6811039297, 6811039298, 6811039299],
     ),
   },
   {
@@ -44,7 +46,7 @@ export const releases = [
     backBg: '#9A9C1C',
     backInk: '#0B0B0B',
     synthRoot: 196,
-    tracks: tracks(['C++', 'Nostalgia', 'Voces de Invierno', 'Transferencia Tecno', 'Disco y T.V'], ['0:59', '3:38', '3:13', '3:26', '2:35']),
+    tracks: tracks(['C++', 'Nostalgia', 'Voces de Invierno', 'Transferencia Tecno', 'Disco y T.V'], ['0:59', '3:38', '3:13', '3:26', '2:35'], [1690904047, 1690904048, 1690904049, 1690904051, 1690904052]),
   },
   {
     id: 'hollywood',
@@ -57,11 +59,10 @@ export const releases = [
     backBg: '#293484',
     backInk: '#F2F2F2',
     synthRoot: 220,
-    tracks: tracks(['Pedro Raúl', 'El Hijo de la Bestia', 'Muñeca de Trapo', 'Tren de la Oportunidad'], ['3:13', '4:33', '4:20', '5:17']),
+    tracks: tracks(['Pedro Raúl', 'El Hijo de la Bestia', 'Muñeca de Trapo', 'Tren de la Oportunidad'], ['3:13', '4:33', '4:20', '5:17'], [1614528181, 1614528182, 1614528183, 1614528184]),
   },
 ];
 
-// For now only the first track of each release has a preview.
-function tracks(names, durations) {
-  return names.map((name, i) => ({ name, duration: durations[i], playable: i === 0 }));
+function tracks(names, durations, appleIds) {
+  return names.map((name, i) => ({ name, duration: durations[i], appleId: appleIds[i], playable: true }));
 }
