@@ -369,9 +369,11 @@ html:not(.js) .hero .hero__meter {
   --btn-shadow: var(--pink);
 }
 
-/* Packed collage: fixed-height stage; fan-wall.js sizes and scatters the pieces inside it */
+/* Packed collage: fixed-height stage; fan-wall.js sizes and scatters the pieces inside it.
+   Own stacking context, so the pieces' (and tooltip's) high z-indexes never climb over the sticky nav. */
 .fans__stage {
   position: relative;
+  isolation: isolate;
   min-height: clamp(420px, 52vw, 640px);
 }
 
