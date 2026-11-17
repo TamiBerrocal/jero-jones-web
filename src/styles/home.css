@@ -59,13 +59,21 @@
   mix-blend-mode: multiply;
 }
 
-.hero__grain svg {
+/* The noise moves on its own layer: animating the wrapper (not the SVG) keeps it on the compositor */
+.hero__grain-move {
   position: absolute;
   left: -48px;
   top: -48px;
   width: calc(100% + 96px);
   height: calc(100% + 96px);
+  will-change: transform;
   animation: jjgrain 0.9s steps(1) infinite;
+}
+
+.hero__grain svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes jjgrain {
@@ -173,24 +181,25 @@
   transition: opacity 0.35s ease;
 }
 
-/* Without JS (or with reduced motion) the hero is a single still with the title shown */
-.hero.is-static {
+/* Without JS the hero is a single still with the title shown. The `js` class is set by an inline
+   script in <head> (see vite.config.js), so the pinned layout is already in place at first paint. */
+html:not(.js) .hero {
   height: auto;
 }
 
-.hero.is-static .hero__stage {
+html:not(.js) .hero .hero__stage {
   position: relative;
   height: clamp(560px, 62.5vw, 900px);
   max-height: calc(100svh - var(--nav-h));
 }
 
-.hero.is-static .hero__line,
-.hero.is-static .hero__bar {
+html:not(.js) .hero .hero__line,
+html:not(.js) .hero .hero__bar {
   opacity: 1;
   --bar: 1;
 }
 
-.hero.is-static .hero__meter {
+html:not(.js) .hero .hero__meter {
   display: none;
 }
 
@@ -671,16 +680,16 @@
   }
 }
 
-.tour.is-static {
+html:not(.js) .tour {
   height: auto;
 }
 
-.tour.is-static .tour__stage {
+html:not(.js) .tour .tour__stage {
   --th: clamp(600px, 62.5vw, 900px);
   position: relative;
 }
 
-.tour.is-static .tour__meter {
+html:not(.js) .tour .tour__meter {
   visibility: hidden;
 }
 

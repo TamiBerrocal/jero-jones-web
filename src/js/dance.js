@@ -55,7 +55,7 @@ function releaseMarkup(r, ri) {
     <div class="rec" style="--label: ${r.label}">
       <div class="rec__disc" aria-hidden="true"></div>
       <div class="rec__card">
-        <div class="rec__face" style="background: ${r.bg}"><img src="${r.img}" alt="Tapa de ${escape(r.title)}" loading="lazy"></div>
+        <div class="rec__face" style="background: ${r.bg}"><img src="${r.img}" alt="Tapa de ${escape(r.title)}" ${ri === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}></div>
         <div class="rec__face rec__back" style="background: ${r.backBg}; color: ${r.backInk}">
           <p class="rec__meta">${escape(r.kind)} · ${r.year}</p>
           <p class="rec__back-title cond">${escape(r.title)}</p>

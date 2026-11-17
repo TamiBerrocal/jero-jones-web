@@ -4,8 +4,8 @@
 const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const IMAGES = [
-  'crowd-lavanda.png', 'covers/circuito.jpg', 'portrait-wink.jpg', 'covers/hollywood.jpg',
-  'crowd-terracota.png', 'covers/transferencia.jpg', 'covers/amor.jpg', 'covers/tipos-y-minas.jpg',
+  'crowd-lavanda.webp', 'covers/circuito.jpg', 'portrait-wink.jpg', 'covers/hollywood.jpg',
+  'crowd-terracota.webp', 'covers/transferencia.jpg', 'covers/amor.jpg', 'covers/tipos-y-minas.jpg',
 ];
 const NAMES = [
   'Tamara B.', 'Lucas G.', 'Martina S.', 'Juli R.', 'Nico P.', 'Cami F.', 'Santi M.', 'Ana L.',

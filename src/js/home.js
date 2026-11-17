@@ -13,32 +13,94 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const HERO_FRAMES = 51;
 const TOUR_FRAMES = 61;
 
-// Builds the frame stack for a sequence. The first frame is already in the markup; the rest load in
-// order once the page has finished loading, so the first paint isn't competing with 100+ images.
-function frameStack(container, folder, count) {
+const FRAME_BATCH = 6;
+
+// Builds the frame stack for a sequence. The first frame is already in the markup; the rest wait until
+// `when(start)` calls start, then load in scroll order, a few at a time, so they never compete with the
+// first paint. Until a frame has loaded, the stack shows the closest loaded frame before it.
+function frameStack(container, folder, count, when) {
   const imgs = [container.querySelector('img')];
+  const loaded = [true];
   for (let i = 2; i <= count; i++) {
     const img = document.createElement('img');
     img.alt = '';
     img.decoding = 'async';
-    img.dataset.src = asset(`${folder}/${String(i).padStart(2, '0')}.webp`);
     container.append(img);
     imgs.push(img);
+    loaded.push(false);
   }
-  const load = () => imgs.forEach((img) => img.dataset.src && (img.src = img.dataset.src));
-  if (document.readyState === 'complete') load();
-  else window.addEventListener('load', load, { once: true });
 
   let current = 0;
-  imgs[0].classList.add('is-on');
-  return (index) => {
-    if (index === current) return false;
+  let wanted = 0;
+  const paint = () => {
+    let index = wanted;
+    while (!loaded[index]) index--;
+    if (index === current) return;
     imgs[current].classList.remove('is-on');
     imgs[index].classList.add('is-on');
     current = index;
-    return imgs[index];
+  };
+
+  let next = 1;
+  const loadBatch = () => {
+    const first = next;
+    const batch = imgs.slice(first, first + FRAME_BATCH);
+    next = first + batch.length;
+    let left = batch.length;
+    batch.forEach((img, k) => {
+      const i = first + k;
+      const done = () => {
+        loaded[i] = img.complete && img.naturalWidth > 0;
+        if (loaded[i] && i <= wanted) paint();
+        if (--left === 0 && next < imgs.length) loadBatch();
+      };
+      img.addEventListener('load', done, { once: true });
+      img.addEventListener('error', done, { once: true });
+      img.src = asset(`${folder}/${String(i + 1).padStart(2, '0')}.webp`);
+    });
+  };
+  let started = false;
+  when(() => {
+    if (!started && imgs.length > 1) {
+      started = true;
+      loadBatch();
+    }
+  });
+
+  imgs[0].classList.add('is-on');
+  return (index) => {
+    wanted = index;
+    paint();
   };
 }
+
+// Hero frames: start shortly after the page has loaded and gone idle, or right away as soon as the visitor
+// scrolls, taps or presses a key, so someone who starts scrolling never waits on the timer.
+function afterLoadOrInteraction(start) {
+  const events = ['scroll', 'pointerdown', 'touchstart', 'keydown'];
+  const go = () => {
+    events.forEach((e) => window.removeEventListener(e, go));
+    start();
+  };
+  events.forEach((e) => window.addEventListener(e, go, { passive: true, once: true }));
+  const idle = () => setTimeout(() => (window.requestIdleCallback || setTimeout)(go, { timeout: 1500 }), 2000);
+  if (document.readyState === 'complete') idle();
+  else window.addEventListener('load', idle, { once: true });
+}
+
+// Tour frames: start when the tour gets within two screens of the viewport.
+const whenNear = (section) => (start) => {
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        io.disconnect();
+        start();
+      }
+    },
+    { rootMargin: '200% 0px' },
+  );
+  io.observe(section);
+};
 
 // Where a sticky stage pins (below the fixed nav), in px from the viewport top.
 const stickyTop = (stage) => parseFloat(getComputedStyle(stage).top) || 0;
@@ -53,15 +115,13 @@ function pinProgress(section, stage) {
 function initHero() {
   const hero = document.querySelector('[data-hero]');
   const stage = hero.querySelector('.hero__stage');
-  const show = frameStack(hero.querySelector('[data-frames]'), 'hero', HERO_FRAMES);
+  const show = frameStack(hero.querySelector('[data-frames]'), 'hero', HERO_FRAMES, afterLoadOrInteraction);
   const lines = hero.querySelectorAll('[data-line]');
   const bar = hero.querySelector('[data-bar]');
   const counter = hero.querySelector('[data-counter]');
   const meter = hero.querySelector('[data-meter]');
   const hint = hero.querySelector('[data-hint]');
   const SCRUB = 3000 / 4500;
-
-  hero.classList.remove('is-static');
 
   return () => {
     const p = pinProgress(hero, stage);
@@ -84,7 +144,7 @@ function initHero() {
 function initTour() {
   const tour = document.querySelector('[data-tour]');
   const stage = tour.querySelector('.tour__stage');
-  const show = frameStack(tour.querySelector('[data-tour-frames]'), 'tour', TOUR_FRAMES);
+  const show = frameStack(tour.querySelector('[data-tour-frames]'), 'tour', TOUR_FRAMES, whenNear(tour));
   const hint = tour.querySelector('[data-tour-hint]');
   const board = tour.querySelector('[data-flaps]');
 
@@ -110,8 +170,6 @@ function initTour() {
     return cell;
   });
   const shown = new Array(SLOTS).fill(null);
-
-  tour.classList.remove('is-static');
 
   const units = () => {
     const travel = tour.offsetHeight - stage.offsetHeight;
