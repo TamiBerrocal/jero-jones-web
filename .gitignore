@@ -4,3 +4,5 @@ dist
 .claude
 CLAUDE.md
 *.local
+# The built app keeps bundled fonts and icons under assets/node_modules
+!public/app/assets/node_modules
