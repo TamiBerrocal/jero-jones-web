@@ -472,3 +472,19 @@ html.menu-open {
   font-size: 13px;
   color: #fff;
 }
+
+/* Link to the Forma de Onda web app, only on touch-first devices (phones, tablets): the app reads
+   the phone's motion sensors, so on a desktop it has nothing to measure. */
+.nav__app {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .nav__app {
+    display: inline-flex;
+  }
+
+  .nav.is-compact .nav__app {
+    margin-top: clamp(12px, 3svh, 28px);
+  }
+}
