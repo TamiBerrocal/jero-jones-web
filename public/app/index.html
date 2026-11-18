@@ -5,6 +5,9 @@
     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Forma de Onda</title>
+    <meta name="description" content="Forma de Onda: medí cuánto bailás en los shows de Jero Jones y competí en el ranking de la pista." />
+    <!-- Matches Palette.black so the browser chrome and first paint use the app background -->
+    <meta name="theme-color" content="#0B0B0B" />
     <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
     <style id="expo-reset">
       /* These styles make the body full-height */
@@ -15,6 +18,8 @@
       /* These styles disable body scrolling if you are using <ScrollView> */
       body {
         overflow: hidden;
+        /* Dark first paint instead of a white flash while the bundle loads */
+        background-color: #0B0B0B;
       }
       /* These styles make the root element full-height */
       #root {
@@ -26,12 +31,11 @@
   <link rel="icon" href="/jero-jones-web/app/favicon.ico"/></head>
 
   <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
     <noscript>
-      You need to enable JavaScript to run this app.
+      Necesitás habilitar JavaScript para usar esta app.
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
-  <script src="/jero-jones-web/app/_expo/static/js/web/index-975c55f9f3e152e00de4690e7a4b6254.js" defer></script>
+  <script src="/jero-jones-web/app/_expo/static/js/web/index-a4e840f633d27e89f09e210fb5dee365.js" defer></script>
 </body>
 </html>
