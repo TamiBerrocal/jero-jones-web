@@ -1,4 +1,5 @@
 import { getFanPieces } from './api.js';
+import { seededRandom } from './random.js';
 
 // Packed collage: the stage keeps a fixed height and every piece shrinks as more arrive, down to
 // MIN_SIZE. Pieces are bigger than their cell (OVERLAP) so they pile up like a hand-made collage.
@@ -10,17 +11,6 @@ const MAX_TILT = 7;
 // On hover/focus a piece grows to at least this size, so the smallest ones can still be seen.
 const HOVER_MIN_SIZE = 96;
 const SHADOWS = ['var(--pink)', 'var(--indigo)', 'var(--olive)', 'var(--plum)'];
-
-// Small deterministic PRNG seeded from the piece ids, so the collage doesn't reshuffle on resize.
-function seededRandom(seedText) {
-  let seed = 2166136261;
-  for (const char of seedText) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
-  return () => {
-    seed = Math.imul(seed ^ (seed >>> 15), 2246822507);
-    seed = Math.imul(seed ^ (seed >>> 13), 3266489909);
-    return ((seed ^= seed >>> 16) >>> 0) / 4294967296;
-  };
-}
 
 function shuffle(list, random) {
   for (let i = list.length - 1; i > 0; i--) {

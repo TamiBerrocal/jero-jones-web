@@ -26,6 +26,7 @@ export default defineConfig({
         home: resolve(import.meta.dirname, 'index.html'),
         quien: resolve(import.meta.dirname, 'quien.html'),
         dance: resolve(import.meta.dirname, 'dance.html'),
+        homeAlbum: resolve(import.meta.dirname, 'home-album.html'),
       },
     },
   },
