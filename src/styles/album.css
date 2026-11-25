@@ -403,6 +403,7 @@
 
 .album__cover {
   background: var(--pink);
+  container-type: inline-size;
 }
 
 .album__cover-inner,
@@ -418,20 +419,91 @@
   display: flex;
   flex-direction: column;
   margin: 0;
-  font-size: clamp(42px, 6.4vw, 92px);
+  /* "Senoidal" spans the cover's width */
+  font-size: 20cqi;
   line-height: 0.86;
 }
 
 .album__cover-block {
-  margin-top: 0.06em;
+  margin-top: 0.1em;
+  font-size: 0.56em;
+  white-space: nowrap;
   background: var(--black);
   color: var(--pink);
 }
 
+/* The winning photo, printed edge to edge (under the grain and crease), raised to sit on a solid black band
+   that carries the logo. The photo fades into the band only over its own bottom edge. */
+.album__cover {
+  --band: 7.5%;  /* solid black at the bottom of the cover: ends where the logo ends */
+}
+
+.album__cover-photo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--band);
+  aspect-ratio: 1274 / 849;
+  --fade: 36%;  /* of the photo's height: how far up it fades into the band */
+}
+
+.album__cover-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lies on the photo only, from solid black at its bottom edge (meeting the band) until it disappears. The
+   stops follow an ease-in-out curve: dense near the band, thinning slowly toward the top, so neither end
+   shows an edge (a plain linear ramp left a visible line, like a printing fault). */
+.album__cover-photo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fade);
+  background: linear-gradient(to top,
+    rgb(11 11 11 / 1) 0%,
+    rgb(11 11 11 / 0.987) 6.67%,
+    rgb(11 11 11 / 0.951) 13.33%,
+    rgb(11 11 11 / 0.896) 20%,
+    rgb(11 11 11 / 0.825) 26.67%,
+    rgb(11 11 11 / 0.741) 33.33%,
+    rgb(11 11 11 / 0.648) 40%,
+    rgb(11 11 11 / 0.55) 46.67%,
+    rgb(11 11 11 / 0.45) 53.33%,
+    rgb(11 11 11 / 0.352) 60%,
+    rgb(11 11 11 / 0.259) 66.67%,
+    rgb(11 11 11 / 0.175) 73.33%,
+    rgb(11 11 11 / 0.104) 80%,
+    rgb(11 11 11 / 0.049) 86.67%,
+    rgb(11 11 11 / 0.013) 93.33%,
+    rgb(11 11 11 / 0) 100%);
+}
+
+/* The solid black band under the photo, with the logo in pink. The logo is a mask so it takes the palette
+   colour (logo-nav.svg is white). */
+.album__cover-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--band);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 6% 3.6%;
+  background: var(--black);
+}
+
 .album__cover-logo {
-  margin-top: auto;
-  width: 46%;
-  height: auto;
+  display: block;
+  width: 30%;
+  aspect-ratio: 885.08 / 180.97;
+  background: var(--pink);
+  mask: url('/assets/logo-nav.svg') center / contain no-repeat;
 }
 
 .album__back {

@@ -108,10 +108,14 @@ function createBlankPage(number) {
 
 function createCover() {
   const node = el('div', 'album__page album__cover', { 'data-density': 'hard' });
+  // The winning fan photo is printed full-bleed near the bottom; a black band below it carries the logo.
   node.innerHTML = `
+    <div class="album__cover-photo">
+      <img src="${import.meta.env.BASE_URL}assets/album/cover.jpg" alt="La foto ganadora: Jero Jones canta al micrófono, con anteojos de sol y remera a rayas" width="1274" height="849">
+    </div>
+    <span class="album__cover-band" aria-hidden="true"><span class="album__cover-logo"></span></span>
     <div class="album__cover-inner">
-      <p class="album__cover-title cond"><span class="tear"><span class="tear-top fit-cap">Álbum</span><span class="tear-bot fit-cap" aria-hidden="true">Álbum</span></span><span class="album__cover-block block">de fotos</span></p>
-      <img class="album__cover-logo" src="${import.meta.env.BASE_URL}assets/logo-nav.svg" alt="" width="150" height="31">
+      <p class="album__cover-title cond"><span class="tear"><span class="tear-top fit-cap">Senoidal</span><span class="tear-bot fit-cap" aria-hidden="true">Senoidal</span></span><span class="album__cover-block block">por ustedes</span></p>
     </div>`;
   return node;
 }
