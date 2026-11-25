@@ -134,7 +134,8 @@
 }
 
 .album__page.is-first,
-.album__page.is-last {
+.album__page.is-last,
+.album__page.is-turning {
   --edge: none;
 }
 

@@ -233,6 +233,13 @@ export function initAlbum() {
     else if (frontTurning) shift = index === 0 ? 0 : -25;
     else if (backTurning) shift = index === total - 1 ? 0 : 25;
     book.style.setProperty('--shift', `${shift}%`);
+
+    // The lines of the stacked pages belong to the block, not to one sheet: the sheet being turned (drawn
+    // on top, z-index 5, no longer `--simple`) drops them, so they stay put on the page underneath.
+    const reading = flip.getState() === 'read';
+    pages.forEach((page) => {
+      page.classList.toggle('is-turning', !reading && page.style.zIndex === '5' && !page.classList.contains('--simple'));
+    });
     frontBoard.classList.toggle('is-visible', showFront);
     backBoard.classList.toggle('is-visible', showBack);
   }
