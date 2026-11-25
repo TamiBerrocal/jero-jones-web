@@ -270,6 +270,19 @@ html:not(.js) .hero .hero__meter {
   display: block;
 }
 
+/* Logo printed on the cover, bottom-right (senoidal.html). logo-nav.svg is white; the corner is light. */
+.release__art { position: relative; }
+
+.release__art .release__logo {
+  position: absolute;
+  right: 6%;
+  bottom: 5%;
+  width: 38%;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0);
+}
+
 .release__body {
   flex: 1 1 380px;
   min-width: 0;

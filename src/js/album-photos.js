@@ -1,4 +1,4 @@
-// The 20 photos of the "Cerrando el circuito" album (home-album.html), in book order.
+// The 20 photos of the "Cerrando el circuito" album (senoidal.html), in book order.
 // `caption` is optional and shows as a sticker note on the layouts that have room for one.
 //
 // PLACEHOLDERS: these reuse images already on the site until the curated photos arrive. To swap them in,

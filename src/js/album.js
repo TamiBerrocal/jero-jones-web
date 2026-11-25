@@ -2,7 +2,7 @@ import { PageFlip } from 'page-flip';
 import { ALBUM_PHOTOS } from './album-photos.js';
 import { seededRandom } from './random.js';
 
-// "Cerrando el circuito" as a photo book (home-album.html): a hard cover, inner pages laid out like a
+// "Cerrando el circuito" as a photo book (senoidal.html): a hard cover, inner pages laid out like a
 // photo album, and a hard back cover. page-flip (StPageFlip) curls the pages:
 // drag a corner, click a page edge, or use the buttons and the ←/→ keys. One page in portrait, spreads
 // in landscape.
