@@ -65,6 +65,7 @@ function createPhoto(photo, layout, index, random) {
 
   const frame = el('div', layout === 'duo' ? 'album__frame duo' : 'album__frame');
   const img = el('img', '', { src: photo.src, alt: photo.alt, loading: 'lazy', decoding: 'async', draggable: 'false' });
+  if (photo.position) img.style.objectPosition = photo.position;
   frame.append(img);
   if (layout === 'duo') frame.append(el('span', 'shade', { 'aria-hidden': 'true' }));
   figure.append(frame);

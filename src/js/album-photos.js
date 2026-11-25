@@ -1,30 +1,30 @@
-// The 20 photos of the "Cerrando el circuito" album (senoidal.html), in book order.
-// `caption` is optional and shows as a sticker note on the layouts that have room for one.
+// The 20 photos of the "Cerrando el circuito" album (senoidal.html), in book order: the patio show first
+// (pages 1–5), then the big venue (pages 6–10). `caption` is optional and shows as a sticker note on the
+// layouts that have room for one. `position` (optional) is the object-position for slots that crop.
 //
-// PLACEHOLDERS: these reuse images already on the site until the curated photos arrive. To swap them in,
-// save the files as public/assets/album/01.webp … 20.webp (PNGs: run scripts/png-to-webp.mjs) and point
-// `src` at `asset('album/NN.webp')`. Any aspect ratio works: every slot crops with object-fit: cover.
-const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
+// The files are built by `node scripts/album-photos.mjs` from the originals in assets-src/album/NN.jpg,
+// which bakes in each photo's film look (grain, dust, tone). Change a photo there and rerun the script.
+const asset = (name) => `${import.meta.env.BASE_URL}assets/album/${name}`;
 
 export const ALBUM_PHOTOS = [
-  { src: asset('hero/01.webp'), alt: 'Jero Jones en el escenario', caption: 'Primera fila, primera canción' },
-  { src: asset('crowd-lavanda.webp'), alt: 'El público con las manos arriba' },
-  { src: asset('covers/circuito.jpg'), alt: 'Tapa de Circuito' },
-  { src: asset('portrait-wink.jpg'), alt: 'Jero Jones guiñando un ojo', caption: 'El guiño que nadie vio venir' },
-  { src: asset('covers/hollywood.jpg'), alt: 'Tapa de Hollywood' },
-  { src: asset('tour/10.webp'), alt: 'Fotograma de la gira Forma de onda' },
-  { src: asset('covers/amor.jpg'), alt: 'Tapa de Amor' },
-  { src: asset('crowd-terracota.webp'), alt: 'El público bailando' },
-  { src: asset('hero/18.webp'), alt: 'Jero Jones cantando' },
-  { src: asset('covers/transferencia.jpg'), alt: 'Tapa de Transferencia' },
-  { src: asset('tour/30.webp'), alt: 'Fotograma de la gira Forma de onda' },
-  { src: asset('covers/tipos-y-minas.jpg'), alt: 'Tapa de Tipos y minas', caption: 'Esta la armamos entre todos' },
-  { src: asset('hero/30.webp'), alt: 'Jero Jones en el escenario' },
-  { src: asset('tour/45.webp'), alt: 'Fotograma de la gira Forma de onda' },
-  { src: asset('crowd-lavanda.webp'), alt: 'El público con las manos arriba' },
-  { src: asset('hero/40.webp'), alt: 'Jero Jones bailando' },
-  { src: asset('tour/55.webp'), alt: 'Fotograma de la gira Forma de onda' },
-  { src: asset('covers/circuito.jpg'), alt: 'Tapa de Circuito' },
-  { src: asset('portrait-wink.jpg'), alt: 'Jero Jones guiñando un ojo' },
-  { src: asset('hero/51.webp'), alt: 'Jero Jones saludando', caption: 'Hasta la próxima vuelta' },
+  { src: asset('01.webp'), alt: 'Jero Jones canta con la cabeza hacia atrás frente al teclado, bajo un árbol del patio', caption: 'Luces, cámara y ¡SHOW!' },
+  { src: asset('02.webp'), alt: 'La banda toca frente a una pared de chapa con grafitis' },
+  { src: asset('03.webp'), alt: 'El patio lleno: Jero Jones canta y el público saca fotos' },
+  { src: asset('04.webp'), alt: 'Jero Jones extiende el cable del micrófono hacia la cámara', caption: 'Vos. Sí, vos.', position: '20% 50%' },
+  { src: asset('05.webp'), alt: 'El guitarrista, agachado, ajusta sus pedales' },
+  { src: asset('06.webp'), alt: 'El bajista toca con el baterista detrás' },
+  { src: asset('07.webp'), alt: 'Jero Jones canta a los gritos con el bajista a su lado' },
+  { src: asset('08.webp'), alt: 'Jero Jones toca el sintetizador con anteojos de sol' },
+  { src: asset('09.webp'), alt: 'Tres fans abrazados cantan entre el público' },
+  { src: asset('10.webp'), alt: 'De espaldas, Jero Jones canta mirando al público del patio' },
+  { src: asset('11.webp'), alt: 'Jero Jones canta junto al bajista frente a la chapa pintada', position: '30% 50%' },
+  { src: asset('12.webp'), alt: 'Jero Jones detrás del sintetizador, junto a la pared de grafitis' },
+  { src: asset('13.webp'), alt: 'Desde el escenario, Jero Jones de traje blanco frente a un estadio lleno y haces de luz' },
+  { src: asset('14.webp'), alt: 'Jero Jones canta al micrófono con anteojos de sol y moño' },
+  { src: asset('15.webp'), alt: 'Una fan grita con el brazo en alto en la primera fila' },
+  { src: asset('16.webp'), alt: 'Jero Jones, de espaldas, levanta el brazo frente al público' },
+  { src: asset('17.webp'), alt: 'El público se estira para tocar a Jero Jones bajo luces rosas' },
+  { src: asset('18.webp'), alt: 'Las piernas de Jero Jones, de pantalón blanco, sobre el escenario' },
+  { src: asset('19.webp'), alt: 'Jero Jones canta sostenido por las manos del público', caption: 'Hoy te vas y estoy de vuelta en la arena' },
+  { src: asset('20.webp'), alt: 'Jero Jones pasa música frente a una pista llena', caption: 'Mejor adiós', position: '30% 50%' },
 ];

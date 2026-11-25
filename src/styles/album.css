@@ -266,7 +266,8 @@
   background: none;
   box-shadow: none;
   font-size: clamp(18px, 2.2vw, 30px);
-  transform: rotate(-1.5deg);
+  /* Written on the print, so it follows the print's tilt; a tilt of its own made it run crooked */
+  transform: none;
 }
 
 .album__page--grid4 .album__sheet {
@@ -316,6 +317,8 @@
 .album__page--duo .album__frame {
   --duo-light: var(--pink);
   --duo-dark: var(--night);
+  /* .album__frame's lavender fill loads after .duo and would otherwise replace the pink */
+  background: var(--duo-light);
 }
 
 .album__page--trio .album__photo--1 {
