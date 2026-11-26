@@ -5,7 +5,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
+}
+
+/* Half the bottom padding: the book takes the height instead */
+.fans--album {
+  padding-bottom: calc(min(var(--section-y), 6svh) / 2);
 }
 
 /* Room around the book for its shadow and the page curl. page-flip derives the height from the
@@ -15,6 +20,21 @@
   width: 100%;
   max-width: min(1240px, max(560px, calc((100svh - var(--nav-h) - 150px) * 920 / 600 + 48px)));
   padding: 8px clamp(0px, 2vw, 24px) 16px;
+}
+
+/* Tablet and up the album fills the screen under the section heading (home.css), so it can be a size
+   container: the cap comes from the height that's really left, minus the stage padding, the
+   controls and the hint (~104px). */
+@media (min-width: 768px) {
+  .album {
+    container-type: size;
+    min-height: 420px;
+  }
+
+  .album__stage {
+    /* Floor: 480px keeps page-flip in spreads (it needs 2 × minWidth = 400px of book) */
+    max-width: min(1240px, max(480px, calc((100cqh - 104px) * 920 / 600 + 48px)));
+  }
 }
 
 /* The book breaks from the site's hard offset shadows on purpose: soft, light-from-above shadows make
@@ -530,11 +550,18 @@
 .album__controls {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
 }
 
 .album__nav {
-  padding: 10px 14px;
+  --btn-offset: 3px;
+  min-height: 36px;
+  padding: 6px 10px;
+}
+
+.album__nav svg {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 .album__nav:disabled {
@@ -551,13 +578,14 @@
 .album__count {
   min-width: 9ch;
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   text-align: center;
 }
 
 .album__hint {
-  margin: 0;
-  font-size: 15px;
+  margin: -4px 0 0;
+  font-size: 13px;
+  opacity: 0.75;
 }
 
 @media (hover: none) {

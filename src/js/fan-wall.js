@@ -1,11 +1,14 @@
 import { getFanPieces } from './api.js';
 import { seededRandom } from './random.js';
 
-// Packed collage: the stage keeps a fixed height and every piece shrinks as more arrive, down to
+// Packed collage: the stage keeps the height the layout gives it (the rest of the screen under the
+// heading on tablet and up, a fixed floor on phones) and every piece shrinks as more arrive, down to
 // MIN_SIZE. Pieces are bigger than their cell (OVERLAP) so they pile up like a hand-made collage.
 // Once they're all at MIN_SIZE, the stage grows taller instead of shrinking them further.
 const MIN_SIZE = 20;
-const MAX_SIZE = 260;
+// Largest piece, as a share of the stage height. A fixed pixel cap left a few pieces floating in big
+// empty cells once the stage fills a wide screen.
+const MAX_SHARE = 0.6;
 const OVERLAP = 1.45;
 const MAX_TILT = 7;
 // On hover/focus a piece grows to at least this size, so the smallest ones can still be seen.
@@ -20,21 +23,31 @@ function shuffle(list, random) {
   return list;
 }
 
-// Splits the stage into a grid that matches its aspect ratio; each piece takes one cell.
+// Splits the stage into a grid that matches its aspect ratio; each piece takes one cell. Rows are
+// balanced (5 pieces → 3 + 2, never 4 + 1) and slotPosition spreads a short last row across the full
+// width, so a few pieces never leave whole columns empty.
 function computeGrid(count, width, baseHeight) {
-  const cols = Math.max(1, Math.round(Math.sqrt((count * width) / baseHeight)));
-  const rows = Math.ceil(count / cols);
+  const ideal = Math.max(1, Math.round(Math.sqrt((count * width) / baseHeight)));
+  const rows = Math.ceil(count / ideal);
+  const cols = Math.ceil(count / rows);
   const cellW = width / cols;
   const cellH = baseHeight / rows;
   const size = Math.min(cellW, cellH) * OVERLAP;
   if (size >= MIN_SIZE) {
-    return { cols, rows, cellW, cellH, height: baseHeight, size: Math.min(size, MAX_SIZE, width * 0.9, baseHeight * 0.9) };
+    return { cols, rows, cellW, cellH, height: baseHeight, size: Math.min(size, width * 0.9, baseHeight * MAX_SHARE) };
   }
   // Floor reached: keep pieces at MIN_SIZE and let the stage grow to fit them.
   const cell = MIN_SIZE / OVERLAP;
   const fitCols = Math.max(1, Math.floor(width / cell));
   const fitRows = Math.ceil(count / fitCols);
   return { cols: fitCols, rows: fitRows, cellW: width / fitCols, cellH: cell, height: Math.max(baseHeight, fitRows * cell), size: MIN_SIZE };
+}
+
+// Centre of slot `slot` (0..count-1), filled row by row; the last row's slots share the whole width.
+function slotPosition(slot, count, grid, width) {
+  const row = Math.floor(slot / grid.cols);
+  const inRow = row === grid.rows - 1 ? count - row * grid.cols : grid.cols;
+  return { col: slot % grid.cols, row, cellW: width / inRow };
 }
 
 function createPiece(piece, index) {
@@ -82,7 +95,8 @@ export async function initFanWall() {
   const random = seededRandom(pieces.map((piece) => piece.id).join('|'));
   // Per-piece jitter, tilt and stacking order, fixed for the page's lifetime.
   const jitter = pieces.map(() => ({ x: random() - 0.5, y: random() - 0.5, tilt: (random() * 2 - 1) * MAX_TILT, z: random() }));
-  let lastWidth = 0;
+  let lastKey = '';
+  let lastHeight = '';
   let active = null;
 
   function hideTip() {
@@ -115,24 +129,32 @@ export async function initFanWall() {
   }
 
   function layout() {
+    // Measure the height the layout offers before our own overflow height takes over (min-height:
+    // the stage's flex basis is 0, so a plain height would be ignored).
+    stage.style.minHeight = '';
     const width = stage.clientWidth;
-    if (!width || width === lastWidth) return;
-    lastWidth = width;
-    const baseHeight = parseFloat(getComputedStyle(stage).minHeight) || 520;
+    const baseHeight = stage.clientHeight || 420;
+    const key = `${width}x${baseHeight}`;
+    if (!width || key === lastKey) {
+      stage.style.minHeight = lastHeight;
+      return;
+    }
+    lastKey = key;
     const grid = computeGrid(pieces.length, width, baseHeight);
-    const cells = shuffle([...Array(grid.cols * grid.rows).keys()], seededRandom(`${grid.cols}x${grid.rows}`));
+    const slots = shuffle([...Array(pieces.length).keys()], seededRandom(`${grid.cols}x${grid.rows}`));
     const half = grid.size / 2;
 
-    stage.style.height = `${grid.height}px`;
+    lastHeight = `${grid.height}px`;
+    stage.style.minHeight = lastHeight;
     list.style.setProperty('--fan-size', `${grid.size}px`);
     list.style.setProperty('--fan-hover-scale', String(Math.max(1.08, HOVER_MIN_SIZE / grid.size)));
     list.style.setProperty('--fan-border', grid.size < 48 ? '1px' : '2px');
     list.style.setProperty('--fan-offset', `${Math.max(2, Math.round(grid.size * 0.035))}px`);
 
     items.forEach((item, i) => {
-      const cell = cells[i];
-      const x = ((cell % grid.cols) + 0.5 + jitter[i].x * 0.6) * grid.cellW;
-      const y = (Math.floor(cell / grid.cols) + 0.5 + jitter[i].y * 0.6) * grid.cellH;
+      const slot = slotPosition(slots[i], pieces.length, grid, width);
+      const x = (slot.col + 0.5 + jitter[i].x * 0.6) * slot.cellW;
+      const y = (slot.row + 0.5 + jitter[i].y * 0.6) * grid.cellH;
       const button = item.firstChild;
       button.style.left = `${Math.min(Math.max(x, half), width - half)}px`;
       button.style.top = `${Math.min(Math.max(y, half), grid.height - half)}px`;
@@ -166,5 +188,8 @@ export async function initFanWall() {
   });
 
   new ResizeObserver(layout).observe(stage);
+  // The stage can keep its size while the space under the heading changes (e.g. a shorter window
+  // whose pieces already overflow), so re-measure on viewport resizes too.
+  window.addEventListener('resize', layout);
   layout();
 }

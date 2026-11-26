@@ -152,9 +152,10 @@ export function initAlbum() {
     width: 460,
     height: 600,
     size: 'stretch',
-    minWidth: 260,
+    // Low minimums so short screens still get a whole spread instead of one oversized portrait page.
+    minWidth: 200,
     maxWidth: 620,
-    minHeight: 340,
+    minHeight: 260,
     maxHeight: 760,
     showCover: true,
     usePortrait: true,
@@ -194,6 +195,15 @@ export function initAlbum() {
   flip.on('flip', ({ data }) => warm(data));
   flip.on('flip', updateControls);
   flip.on('changeOrientation', updateControls);
+  // page-flip only re-measures on window resize; the stage's cap also moves when the heading above it
+  // reflows (fonts arriving, wrapping), so refresh the book whenever the stage changes size.
+  const stage = book.parentElement;
+  let stageWidth = stage.clientWidth;
+  new ResizeObserver(() => {
+    if (stage.clientWidth === stageWidth) return;
+    stageWidth = stage.clientWidth;
+    flip.update();
+  }).observe(stage);
   updateControls();
 
 

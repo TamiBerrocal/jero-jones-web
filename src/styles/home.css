@@ -335,26 +335,63 @@ html:not(.js) .hero .hero__meter {
 .fans {
   background: var(--paper);
   color: var(--black);
+  /* Vertical rhythm also follows the screen's height, so heading and content fit one screen */
+  padding-block: min(var(--section-y), 6svh);
 }
 
 .fans__inner {
   margin: 0 auto;
 }
 
+/* Tablet and up: the section fills the screen under the sticky nav and its content (collage or
+   photo book) takes whatever the heading leaves */
+@media (min-width: 768px) {
+  .fans {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--nav-h));
+  }
+
+  .fans__inner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+  }
+
+  /* Zero basis: the height comes from flexing alone, so the album's container query units (cqh)
+     resolve to the real space left (with an `auto` basis Chrome resolves them against 0) */
+  .fans__inner > .fans__stage,
+  .fans__inner > .album {
+    flex: 1 1 0;
+  }
+}
+
+/* Compact heading so the height goes to the collage / book: a small title with the intro as its caption,
+   right beside it and top-aligned (the title leads), in small body text with a measure short enough that
+   the block stays about as tall as the title */
 .fans__head {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px clamp(32px, 5vw, 72px);
-  margin-bottom: clamp(36px, 5vw, 64px);
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px clamp(24px, 3vw, 44px);
+  margin-bottom: clamp(12px, 2.5svh, 32px);
+}
+
+@media (min-width: 768px) {
+  .fans__head {
+    flex-wrap: nowrap;
+  }
 }
 
 .fans__title {
   display: flex;
   flex-direction: column;
+  flex: none;
   margin: 0;
-  font-size: clamp(54px, 9vw, 132px);
+  font-size: clamp(40px, min(5.5vw, 7svh), 84px);
   line-height: 0.86;
 }
 
@@ -365,21 +402,37 @@ html:not(.js) .hero .hero__meter {
 }
 
 .fans__intro {
-  flex: 0 1 380px;
+  flex: 0 1 46ch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
-  font-size: clamp(16px, 1.3vw, 19px);
-  line-height: 1.5;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* Wide, short screens: the caption stretches into the empty space beside the title, fewer lines */
+@media (min-width: 768px) and (min-aspect-ratio: 3 / 2) {
+  .fans__intro {
+    flex: 1 1 46ch;
+    max-width: 78ch;
+  }
 }
 
 .fans__intro p {
   margin: 0;
+  /* Trim the leading above the first line so its cap height lines up with the title's (fit-cap) */
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
+  text-wrap: balance;
 }
 
 .fans__intro .btn {
   --btn-shadow: var(--pink);
+  --btn-offset: 3px;
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 13px;
 }
 
 /* Packed collage: fixed-height stage; fan-wall.js sizes and scatters the pieces inside it.
@@ -387,7 +440,9 @@ html:not(.js) .hero .hero__meter {
 .fans__stage {
   position: relative;
   isolation: isolate;
-  min-height: clamp(420px, 52vw, 640px);
+  /* Floor only: on tablet and up the stage stretches to the rest of the screen, and fan-wall.js
+     packs the pieces into whatever height it gets */
+  min-height: clamp(320px, 80vw, 420px);
 }
 
 .fans__wall {
